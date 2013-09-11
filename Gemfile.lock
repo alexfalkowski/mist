@@ -6,6 +6,7 @@ GEM
       nokogiri (< 1.6.0)
       uuidtools (~> 2.1)
     diff-lcs (1.2.4)
+    git (1.2.6)
     given_core (3.1.1)
       sorcerer (>= 0.3.7)
     json (1.8.0)
@@ -29,4 +30,5 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk
+  git
   rspec-given
