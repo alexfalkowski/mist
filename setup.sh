@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+CLI_VERSION='AWS-ElasticBeanstalk-CLI-2.5.1'
+KEY_FILE='id_rsa'
+
 setup_package_dependencies () {
     sudo apt-get -q -y install git
     sudo apt-get -q -y install make
@@ -11,7 +14,6 @@ setup_package_dependencies () {
 }
 
 setup_aws_cli () {
-    CLI_VERSION='AWS-ElasticBeanstalk-CLI-2.5.1'
     CLI_FILE="$CLI_VERSION.zip"
     SCRIPT_PATH=`pwd`
     CLI_LOCATION="$SCRIPT_PATH/$CLI_VERSION"
@@ -23,12 +25,6 @@ setup_aws_cli () {
 }
 
 setup_ssh_hey () {
-    KEY_FILE='id_rsa'
-
-    if [ -f ~/.ssh/$KEY_FILE ]; then
-        return
-    fi
-
     EMAIL='alexrfalkowski@gmail.com'
     MESSAGE="NOTE: Make sure you add the contents of ~/.ssh/$KEY_FILE.pub to Github. Please follow the instructions here https://help.github.com/articles/generating-ssh-keys"
     ssh-keygen -q -t rsa -C $EMAIL -N '' -f $KEY_FILE
@@ -37,7 +33,13 @@ setup_ssh_hey () {
 }
 
 setup_package_dependencies
-setup_aws_cli
-setup_ssh_hey
+
+if [ ! -d "$CLI_VERSION" ]; then
+  setup_aws_cli
+fi
+
+if [ ! -f ~/.ssh/$KEY_FILE ]; then
+    setup_ssh_hey
+fi
 
 exit 0
