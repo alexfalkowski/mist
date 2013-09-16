@@ -1,14 +1,15 @@
 module Mist
   class VersionControl
-    attr_reader :env_variables,:home_path
+    attr_reader :env_variables, :home_path, :kernel
 
-    def initialize(env_variables, home_path = Dir.home)
-      @env_variables, @home_path = env_variables, home_path
+    def initialize(env_variables, home_path = Dir.home, kernel = Kernel)
+      @env_variables, @home_path, @kernel = env_variables, home_path, kernel
       prepare
     end
 
-    def deploy_latest_version
-      # TODO: Need to implement
+    def deploy_latest_version(environment)
+      pull_latest_changes
+      push_to_aws environment
     end
 
     private
@@ -22,13 +23,25 @@ module Mist
 
     def add_deploy_extensions
       Dir.chdir(repository_path) do
-        system aws_dev_tools_script_path
+        kernel.system aws_dev_tools_script_path
       end
     end
 
     def clone_repository
       Dir.mkdir(repository_path)
-      Git.clone(git[:repository_uri], git[:repository_name], :path => git[:local_path])
+      kernel.system "git clone #{git[:repository_uri]} #{repository_path}"
+    end
+
+    def pull_latest_changes
+      Dir.chdir(repository_path) do
+        kernel.system 'git pull'
+      end
+    end
+
+    def push_to_aws(environment)
+      Dir.chdir(repository_path) do
+        kernel.system "git aws.push --environment #{environment}"
+      end
     end
 
     def write_eb_config_file
