@@ -10,6 +10,6 @@ namespace :mist do
   task :deploy do
     environment = Mist::Environment.new(ENV['env'] || 'qa')
     version_control = Mist::VersionControl.new(environment.variables)
-    version_control.deploy_latest_version
+    version_control.deploy_latest_version(environment.variables[:aws][:eb][:environments].first[:name])
   end
 end
