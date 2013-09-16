@@ -1,6 +1,6 @@
 module Mist
   class VersionControl
-    attr_reader :env_variables,:home_path
+    attr_reader :env_variables, :home_path
 
     def initialize(env_variables, home_path = Dir.home)
       @env_variables, @home_path = env_variables, home_path
@@ -28,7 +28,7 @@ module Mist
 
     def clone_repository
       Dir.mkdir(repository_path)
-      Git.clone(git[:repository_uri], git[:repository_name], :path => git[:local_path])
+      system "git clone #{git[:repository_uri]} #{repository_path}"
     end
 
     def write_eb_config_file
