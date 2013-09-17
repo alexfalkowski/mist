@@ -3,10 +3,10 @@ module Mist
     attr_reader :name
 
     def initialize(name)
-      @name = name
-
       raise error_message('AWS_ACCESS_KEY_ID') unless access_key_id
       raise error_message('AWS_SECRET_KEY') unless secret_key
+
+      @name = name.downcase
     end
 
     def variables
@@ -23,10 +23,7 @@ module Mist
               eb: {
                   application_name: 'PINCHme-US',
                   dev_tools_endpoint: 'git.elasticbeanstalk.us-east-1.amazonaws.com',
-                  environments: [
-                      {name: 'PINCHme-US-QA-A'},
-                      {name: 'PINCHme-US-QA-B'},
-                  ],
+                  environments: send("#{name}_environments"),
                   region: 'us-east-1'
               }
           }
@@ -34,6 +31,19 @@ module Mist
     end
 
     private
+
+    def qa_environments
+      [
+          {
+              name: 'PINCHme-US-QA-A',
+              uri: 'http://pinchme-us-qa-a-jn9wvp4tew.elasticbeanstalk.com/'
+          },
+          {
+              name: 'PINCHme-US-QA-B',
+              uri: 'http://pinchme-us-qa-b-ghruzpydi6.elasticbeanstalk.com/'
+          },
+      ]
+    end
 
     def error_message(variable)
       "Please specify the environment variable #{variable}"
