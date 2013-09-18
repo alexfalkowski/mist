@@ -1,5 +1,7 @@
 module Mist
   class Website
+    ENVIRONMENT_NAME_HEADER = 'X-Environment-Name'
+
     attr_reader :uri, :command
 
     def initialize(uri, command = SystemCommand.new)
@@ -18,6 +20,23 @@ module Mist
       }
 
       Mist.logger.info("Successfully warmed up website at URL '#{uri}'")
+    end
+
+    def current_environment
+      environment = headers.split(/\r?\n/).select { |line| line.start_with?(ENVIRONMENT_NAME_HEADER)}.first
+
+      unless environment
+        raise "Could not find the current environment in '#{ENVIRONMENT_NAME_HEADER}'"
+      end
+
+      environment.split(':').last.strip
+    end
+
+    private
+
+    def headers
+      curl_command = "curl --connect-timeout 300 --silent -I '#{uri}'"
+      command.run_command_with_output(curl_command)
     end
   end
 end
