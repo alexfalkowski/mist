@@ -1,24 +1,7 @@
 require 'spec_helper'
 
 describe Mist::ElasticBeanstalk do
-  let(:variables) {
-    {
-        aws: {
-            access_key_id: 'access_key_id',
-            secret_key: 'secret_key',
-
-            eb: {
-                application_name: 'application_name',
-                dev_tools_endpoint: 'dev_tools_endpoint',
-                environments: [
-                    {name: 'environment-1'},
-                    {name: 'environment-2'},
-                ],
-                region: 'region'
-            }
-        }
-    }
-  }
+  let(:variables) { TestEnvironment.variables }
 
   context 'failure event' do
     Given(:aws_eb_client) { double('AWS::Client',

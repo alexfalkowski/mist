@@ -62,10 +62,10 @@ module Mist
     end
 
     def write_aws_credential_file
-      aws_config = env_variables[:aws]
+      eb_config = env_variables[:aws][:eb]
       contents = %Q[
-        AWSAccessKeyId=#{aws_config[:access_key_id]}
-        AWSSecretKey=#{aws_config[:secret_key]}
+        AWSAccessKeyId=#{eb_config[:access_key_id]}
+        AWSSecretKey=#{eb_config[:secret_key]}
       ]
 
       write_file aws_credential_file, contents

@@ -4,8 +4,8 @@ module Mist
 
     def initialize(env_variables, beanstalk = nil)
       @env_variables = env_variables
-      @beanstalk = beanstalk || AWS::ElasticBeanstalk.new(access_key_id: aws_config[:access_key_id],
-                                                          secret_access_key: aws_config[:secret_key])
+      @beanstalk = beanstalk || AWS::ElasticBeanstalk.new(access_key_id: eb_config[:access_key_id],
+                                                          secret_access_key: eb_config[:secret_key])
     end
 
     def wait_for_environment(environment, deploy_date)
@@ -42,8 +42,8 @@ module Mist
       end
     end
 
-    def aws_config
-      env_variables[:aws]
+    def eb_config
+      env_variables[:aws][:eb]
     end
   end
 end
