@@ -64,10 +64,10 @@ describe Mist::VersionControl do
   end
 
   context 'deploy latest version' do
-    Given(:kernel) { double('Kernel', system: nil) }
-    Given(:version_control) { Mist::VersionControl.new(variables, home_path, kernel) }
-    When { version_control.deploy_latest_version('test') }
-    Then { expect(kernel).to have_received(:system).with('git pull') }
-    Then { expect(kernel).to have_received(:system).with('git aws.push --environment test') }
+    Given(:system_command) { double('SystemCommand', run_command: nil) }
+    Given(:version_control) { Mist::VersionControl.new(variables, home_path, system_command) }
+    When { version_control.push_latest_version('test') }
+    Then { expect(system_command).to have_received(:run_command).with('git pull > /dev/null 2>&1') }
+    Then { expect(system_command).to have_received(:run_command).with('git aws.push --environment test > /dev/null 2>&1') }
   end
 end

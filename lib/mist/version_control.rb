@@ -1,13 +1,13 @@
 module Mist
   class VersionControl
-    attr_reader :env_variables, :home_path, :kernel
+    attr_reader :env_variables, :home_path, :system_command
 
-    def initialize(env_variables, home_path = Dir.home, kernel = Kernel)
-      @env_variables, @home_path, @kernel = env_variables, home_path, kernel
+    def initialize(env_variables, home_path = Dir.home, system_command = SystemCommand.new)
+      @env_variables, @home_path, @system_command = env_variables, home_path, system_command
       prepare
     end
 
-    def deploy_latest_version(environment)
+    def push_latest_version(environment)
       pull_latest_changes
       push_to_aws environment
     end
@@ -22,25 +22,29 @@ module Mist
     end
 
     def add_deploy_extensions
+      Mist.logger.info('Adding AWS deployment tools.')
       Dir.chdir(repository_path) do
-        kernel.system aws_dev_tools_script_path
+        run_system_command aws_dev_tools_script_path
       end
     end
 
     def clone_repository
+      Mist.logger.info('Cloning the repository.')
       Dir.mkdir(repository_path)
-      kernel.system "git clone #{git[:repository_uri]} #{repository_path}"
+      run_system_command "git clone #{git[:repository_uri]} #{repository_path}"
     end
 
     def pull_latest_changes
+      Mist.logger.info('Getting the latest version.')
       Dir.chdir(repository_path) do
-        kernel.system 'git pull'
+        run_system_command 'git pull'
       end
     end
 
     def push_to_aws(environment)
+      Mist.logger.info('Pushing to AWS.')
       Dir.chdir(repository_path) do
-        kernel.system "git aws.push --environment #{environment}"
+        run_system_command "git aws.push --environment #{environment}"
       end
     end
 
@@ -74,6 +78,10 @@ module Mist
       File.open(path, 'w+') { |file|
         file.write contents
       }
+    end
+
+    def run_system_command(command)
+      system_command.run_command "#{command} > /dev/null 2>&1"
     end
 
     def repository_path
