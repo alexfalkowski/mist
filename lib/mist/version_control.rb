@@ -1,9 +1,13 @@
 module Mist
   class VersionControl
-    attr_reader :env_variables, :home_path, :system_command
+    attr_reader :env_variables, :home_path, :system_command, :logger
 
-    def initialize(env_variables, home_path = Dir.home, system_command = SystemCommand.new)
+    def initialize(env_variables,
+        home_path = Dir.home,
+        system_command = SystemCommand.new,
+        logger = Mist.logger)
       @env_variables, @home_path, @system_command = env_variables, home_path, system_command
+      @logger = logger
       prepare
     end
 
@@ -22,27 +26,27 @@ module Mist
     end
 
     def add_deploy_extensions
-      Mist.logger.info('Adding AWS deployment tools.')
+      logger.info('Adding AWS deployment tools.')
       Dir.chdir(repository_path) do
         run_system_command aws_dev_tools_script_path
       end
     end
 
     def clone_repository
-      Mist.logger.info('Cloning the repository.')
+      logger.info('Cloning the repository.')
       Dir.mkdir(repository_path)
       run_system_command "git clone #{git[:repository_uri]} #{repository_path}"
     end
 
     def pull_latest_changes
-      Mist.logger.info('Getting the latest version.')
+      logger.info('Getting the latest version.')
       Dir.chdir(repository_path) do
         run_system_command 'git pull'
       end
     end
 
     def push_to_aws(environment)
-      Mist.logger.info('Pushing to AWS.')
+      logger.info('Pushing to AWS.')
       Dir.chdir(repository_path) do
         run_system_command "git aws.push --environment #{environment}"
       end

@@ -1,12 +1,13 @@
 module Mist
   class Deployment
-    attr_reader :environment, :version_control, :eb, :dns
+    attr_reader :environment, :version_control, :eb, :dns, :logger
 
     def initialize(options = {})
       @environment = options.fetch(:environment, Mist::Environment.new(ENV['env'] || 'qa'))
       @version_control = options.fetch(:version_control, Mist::VersionControl.new(environment.variables))
       @eb = options.fetch(:eb, Mist::ElasticBeanstalk.new(environment.variables))
       @dns = options.fetch(:dns, Mist::Dns.new(environment.variables))
+      @logger = options.fetch(:logger, Mist.logger)
     end
 
     def deploy_latest
@@ -21,7 +22,7 @@ module Mist
 
       dns.update_endpoint other_environment_name
 
-      Mist.logger.info("Successfully deployed to environment '#{other_environment_name}' with URL '#{other_environment_uri}'")
+      logger.info("Successfully deployed to environment '#{other_environment_name}' with URL '#{other_environment_uri}'")
     end
 
     private

@@ -1,11 +1,12 @@
 module Mist
   class Dns
-    attr_reader :env_variables, :dns
+    attr_reader :env_variables, :dns, :logger
 
-    def initialize(env_variables, dns = nil)
+    def initialize(env_variables, dns = nil, logger = Mist.logger)
       @env_variables = env_variables
       @dns = dns || AWS::Route53.new(access_key_id: dns_config[:access_key_id],
                                      secret_access_key: dns_config[:secret_key])
+      @logger = logger
     end
 
     def update_endpoint(environment_name)
@@ -40,7 +41,7 @@ module Mist
       }
 
       dns.client.change_resource_record_sets(options)
-      Mist.logger.info("Changed host from '#{current_environment[:name]}' to '#{other_environment[:name]}'")
+      logger.info("Changed host from '#{current_environment[:name]}' to '#{other_environment[:name]}'")
     end
 
     private

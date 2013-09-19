@@ -2,15 +2,16 @@ module Mist
   class Website
     ENVIRONMENT_NAME_HEADER = 'X-Environment-Name'
 
-    attr_reader :uri, :command
+    attr_reader :uri, :command, :logger
 
-    def initialize(uri, command = SystemCommand.new)
+    def initialize(uri, command = SystemCommand.new, logger = Mist.logger)
       @uri = URI.parse(uri)
       @command = command
+      @logger = logger
     end
 
     def warm
-      Mist.logger.info("About to warm up the the website at URL '#{uri}'")
+      logger.info("About to warm up the the website at URL '#{uri}'")
 
       (1..20).each {
         curl_command = "curl --connect-timeout 300 --digest -u 'pinchmebeta:pinchmenyc' --write-out '%{http_code}' --silent --output /dev/null '#{uri}'"
@@ -19,7 +20,7 @@ module Mist
         raise "Could not warm up website on URL '#{uri}' as we got a status code of '#{status_code}'" unless status_code == '200'
       }
 
-      Mist.logger.info("Successfully warmed up website at URL '#{uri}'")
+      logger.info("Successfully warmed up website at URL '#{uri}'")
     end
 
     def current_environment
@@ -29,7 +30,9 @@ module Mist
         raise "Could not find the current environment in '#{ENVIRONMENT_NAME_HEADER}'"
       end
 
-      environment.split(':').last.strip
+      environment.split(':').last.strip.tap { |env|
+        logger.info("Current environment is '#{env}'")
+      }
     end
 
     private

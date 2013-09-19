@@ -1,11 +1,12 @@
 module Mist
   class ElasticBeanstalk
-    attr_reader :env_variables, :beanstalk
+    attr_reader :env_variables, :beanstalk, :logger
 
-    def initialize(env_variables, beanstalk = nil)
+    def initialize(env_variables, beanstalk = nil, logger = Mist.logger)
       @env_variables = env_variables
       @beanstalk = beanstalk || AWS::ElasticBeanstalk.new(access_key_id: eb_config[:access_key_id],
                                                           secret_access_key: eb_config[:secret_key])
+      @logger = logger
     end
 
     def wait_for_environment(environment, deploy_date)
@@ -14,10 +15,10 @@ module Mist
           start_time: deploy_date
       }
 
-      Mist.logger.info("Sending elastic beanstalk the following information '#{options}'")
+      logger.info("Sending elastic beanstalk the following information '#{options}'")
 
       while (result = validate_events(beanstalk.client.describe_events(options)[:events])) == :continue
-        Mist.logger.info('Waiting for elastic beanstalk to indicate whether the deployment is a success or failure, will wait for 10 seconds.')
+        logger.info('Waiting for elastic beanstalk to indicate whether the deployment is a success or failure, will wait for 10 seconds.')
         sleep 10
       end
 
