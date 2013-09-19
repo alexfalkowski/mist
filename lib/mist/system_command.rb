@@ -1,7 +1,5 @@
 module Mist
   class SystemCommand
-    attr_reader :kernel, :logger
-
     def initialize(kernel = Kernel, logger = Mist.logger)
       @kernel = kernel
       @logger = logger
@@ -16,5 +14,9 @@ module Mist
       logger.debug("Running command '#{command}'")
       kernel.system(command)
     end
+
+    private
+
+    attr_reader :kernel, :logger
   end
 end

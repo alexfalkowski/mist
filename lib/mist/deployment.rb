@@ -1,7 +1,5 @@
 module Mist
   class Deployment
-    attr_reader :environment, :version_control, :eb, :dns, :logger
-
     def initialize(options = {})
       @environment = options.fetch(:environment, Mist::Environment.new(ENV['env'] || 'qa'))
       @version_control = options.fetch(:version_control, Mist::VersionControl.new(environment))
@@ -26,6 +24,8 @@ module Mist
     end
 
     private
+
+    attr_reader :environment, :version_control, :eb, :dns, :logger
 
     def website(uri)
       Mist::Website.new(uri)

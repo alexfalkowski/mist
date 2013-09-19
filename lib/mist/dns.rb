@@ -1,7 +1,5 @@
 module Mist
   class Dns
-    attr_reader :environment, :dns, :logger
-
     def initialize(environment, dns = nil, logger = Mist.logger)
       @environment = environment
       @dns = dns || AWS::Route53.new(access_key_id: environment.dns_config[:access_key_id],
@@ -45,6 +43,8 @@ module Mist
     end
 
     private
+
+    attr_reader :environment, :dns, :logger
 
     def zone
       dns.client.list_hosted_zones[:hosted_zones].select { |z|

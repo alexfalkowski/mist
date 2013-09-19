@@ -2,8 +2,6 @@ module Mist
   class Website
     ENVIRONMENT_NAME_HEADER = 'X-Environment-Name'
 
-    attr_reader :uri, :command, :logger
-
     def initialize(uri, command = SystemCommand.new, logger = Mist.logger)
       @uri = URI.parse(uri)
       @command = command
@@ -36,6 +34,8 @@ module Mist
     end
 
     private
+
+    attr_reader :uri, :command, :logger
 
     def headers
       curl_command = "curl --connect-timeout 300 --silent -I '#{uri}'"
