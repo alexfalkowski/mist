@@ -9,8 +9,8 @@ describe Mist::Environment do
       Given { ENV[Mist::Environment::AWS_APP_SECRET_KEY] = 'AWS_ACCESS_KEY_ID' }
       When(:environment) { Mist::Environment.new('qa') }
       Then { environment != Failure(RuntimeError) }
-      Then { environment.variables[:aws][:eb][:access_key_id] ==  'AWS_ACCESS_KEY_ID'}
-      Then { environment.variables[:aws][:eb][:secret_key] ==  'AWS_ACCESS_KEY_ID'}
+      Then { environment.eb_config[:access_key_id] ==  'AWS_ACCESS_KEY_ID'}
+      Then { environment.eb_config[:secret_key] ==  'AWS_ACCESS_KEY_ID'}
     end
 
     context 'without environment variables set' do
@@ -41,8 +41,8 @@ describe Mist::Environment do
       Given { ENV[Mist::Environment::AWS_DNS_SECRET_KEY] = 'AWS_ACCESS_KEY_ID' }
       When(:environment) { Mist::Environment.new('qa') }
       Then { environment != Failure(RuntimeError) }
-      Then { environment.variables[:aws][:dns][:access_key_id] ==  'AWS_ACCESS_KEY_ID'}
-      Then { environment.variables[:aws][:dns][:secret_key] ==  'AWS_ACCESS_KEY_ID'}
+      Then { environment.dns_config[:access_key_id] ==  'AWS_ACCESS_KEY_ID'}
+      Then { environment.dns_config[:secret_key] ==  'AWS_ACCESS_KEY_ID'}
     end
 
     context 'without environment variables set' do

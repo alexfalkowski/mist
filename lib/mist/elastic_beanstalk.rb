@@ -1,11 +1,11 @@
 module Mist
   class ElasticBeanstalk
-    attr_reader :env_variables, :beanstalk, :logger
+    attr_reader :environment, :beanstalk, :logger
 
-    def initialize(env_variables, beanstalk = nil, logger = Mist.logger)
-      @env_variables = env_variables
-      @beanstalk = beanstalk || AWS::ElasticBeanstalk.new(access_key_id: eb_config[:access_key_id],
-                                                          secret_access_key: eb_config[:secret_key])
+    def initialize(environment, beanstalk = nil, logger = Mist.logger)
+      @environment = environment
+      @beanstalk = beanstalk || AWS::ElasticBeanstalk.new(access_key_id: environment.eb_config[:access_key_id],
+                                                          secret_access_key: environment.eb_config[:secret_key])
       @logger = logger
     end
 
@@ -41,10 +41,6 @@ module Mist
       else
         :failure
       end
-    end
-
-    def eb_config
-      env_variables[:aws][:eb]
     end
   end
 end

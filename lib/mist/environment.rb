@@ -18,7 +18,7 @@ module Mist
     end
 
     def variables
-      {
+      @variables ||= {
           git: {
               repository_name: 'PINCHme',
               repository_uri: 'git@github.com:mojotech/PinchMe.git',
@@ -43,6 +43,18 @@ module Mist
       }
     end
 
+    def eb_config
+      variables[:aws][:eb]
+    end
+
+    def dns_config
+      variables[:aws][:dns]
+    end
+
+    def git_config
+      variables[:git]
+    end
+
     def find_environment(name)
       eb_config[:environments].select { |e| e[:name] == name }.first
     end
@@ -62,10 +74,6 @@ module Mist
 
     def error_message(variable)
       "Please specify the environment variable #{variable}"
-    end
-
-    def eb_config
-      variables[:aws][:eb]
     end
 
     def app_access_key_id

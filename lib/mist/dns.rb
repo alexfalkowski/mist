@@ -1,17 +1,17 @@
 module Mist
   class Dns
-    attr_reader :env_variables, :dns, :logger
+    attr_reader :environment, :dns, :logger
 
-    def initialize(env_variables, dns = nil, logger = Mist.logger)
-      @env_variables = env_variables
-      @dns = dns || AWS::Route53.new(access_key_id: dns_config[:access_key_id],
-                                     secret_access_key: dns_config[:secret_key])
+    def initialize(environment, dns = nil, logger = Mist.logger)
+      @environment = environment
+      @dns = dns || AWS::Route53.new(access_key_id: environment.dns_config[:access_key_id],
+                                     secret_access_key: environment.dns_config[:secret_key])
       @logger = logger
     end
 
     def update_endpoint(environment_name)
-      current_environment = eb_config[:environments].select { |e| e[:name] != environment_name }.first
-      other_environment = eb_config[:environments].select { |e| e[:name] == environment_name }.first
+      current_environment = environment.find_other_environment(environment_name)
+      other_environment = environment.find_environment(environment_name)
 
       options = {
           hosted_zone_id: zone[:id],
@@ -21,19 +21,19 @@ module Mist
                   {
                       action: 'DELETE',
                       resource_record_set: {
-                          name: dns_config[:domain],
+                          name: environment.dns_config[:domain],
                           type: 'CNAME',
                           ttl: 300,
-                          resource_records: [ {value: strip_protocol(current_environment[:uri])} ]
+                          resource_records: [{value: strip_protocol(current_environment[:uri])}]
                       }
                   },
                   {
                       action: 'CREATE',
                       resource_record_set: {
-                          name: dns_config[:domain],
+                          name: environment.dns_config[:domain],
                           type: 'CNAME',
                           ttl: 300,
-                          resource_records: [ {value: strip_protocol(other_environment[:uri])} ]
+                          resource_records: [{value: strip_protocol(other_environment[:uri])}]
                       }
                   }
               ]
@@ -47,15 +47,9 @@ module Mist
     private
 
     def zone
-      dns.client.list_hosted_zones[:hosted_zones].select { |z| z[:name] == dns_config[:hosted_zone] }.first
-    end
-
-    def eb_config
-      env_variables[:aws][:eb]
-    end
-
-    def dns_config
-      env_variables[:aws][:dns]
+      dns.client.list_hosted_zones[:hosted_zones].select { |z|
+        z[:name] == environment.dns_config[:hosted_zone]
+      }.first
     end
 
     def strip_protocol(url)
