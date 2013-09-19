@@ -1,9 +1,13 @@
 module Mist
   class VersionControl
-    attr_reader :env_variables, :home_path, :system_command
+    attr_reader :environment, :home_path, :system_command, :logger
 
-    def initialize(env_variables, home_path = Dir.home, system_command = SystemCommand.new)
-      @env_variables, @home_path, @system_command = env_variables, home_path, system_command
+    def initialize(environment,
+        home_path = Dir.home,
+        system_command = SystemCommand.new,
+        logger = Mist.logger)
+      @environment, @home_path, @system_command = environment, home_path, system_command
+      @logger = logger
       prepare
     end
 
@@ -22,50 +26,48 @@ module Mist
     end
 
     def add_deploy_extensions
-      Mist.logger.info('Adding AWS deployment tools.')
+      logger.info('Adding AWS deployment tools.')
       Dir.chdir(repository_path) do
         run_system_command aws_dev_tools_script_path
       end
     end
 
     def clone_repository
-      Mist.logger.info('Cloning the repository.')
+      logger.info('Cloning the repository.')
       Dir.mkdir(repository_path)
-      run_system_command "git clone #{git[:repository_uri]} #{repository_path}"
+      run_system_command "git clone #{environment.git_config[:repository_uri]} #{repository_path}"
     end
 
     def pull_latest_changes
-      Mist.logger.info('Getting the latest version.')
+      logger.info('Getting the latest version.')
       Dir.chdir(repository_path) do
         run_system_command 'git pull'
       end
     end
 
     def push_to_aws(environment)
-      Mist.logger.info('Pushing to AWS.')
+      logger.info('Pushing to AWS.')
       Dir.chdir(repository_path) do
         run_system_command "git aws.push --environment #{environment}"
       end
     end
 
     def write_eb_config_file
-      eb_config = env_variables[:aws][:eb]
       contents = %Q[
         [global]
-        ApplicationName=#{eb_config[:application_name]}
-        DevToolsEndpoint=#{eb_config[:dev_tools_endpoint]}
-        EnvironmentName=#{eb_config[:environments].first[:name]}
-        Region=#{eb_config[:region]}
+        ApplicationName=#{environment.eb_config[:application_name]}
+        DevToolsEndpoint=#{environment.eb_config[:dev_tools_endpoint]}
+        EnvironmentName=#{environment.eb_config[:environments].first[:name]}
+        Region=#{environment.eb_config[:region]}
       ]
 
       write_file eb_config_file, contents
     end
 
     def write_aws_credential_file
-      aws_config = env_variables[:aws]
       contents = %Q[
-        AWSAccessKeyId=#{aws_config[:access_key_id]}
-        AWSSecretKey=#{aws_config[:secret_key]}
+        AWSAccessKeyId=#{environment.eb_config[:access_key_id]}
+        AWSSecretKey=#{environment.eb_config[:secret_key]}
       ]
 
       write_file aws_credential_file, contents
@@ -85,7 +87,8 @@ module Mist
     end
 
     def repository_path
-      @repository_path ||= File.join(git[:local_path], git[:repository_name])
+      @repository_path ||= File.join(environment.git_config[:local_path],
+                                     environment.git_config[:repository_name])
     end
 
     def eb_config_file
@@ -109,10 +112,6 @@ module Mist
                                                'AWSDevTools',
                                                'Linux',
                                                'AWSDevTools-RepositorySetup.sh')
-    end
-
-    def git
-      env_variables[:git]
     end
   end
 end

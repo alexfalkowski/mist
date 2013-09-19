@@ -7,6 +7,7 @@ require 'mist/environment'
 require 'mist/elastic_beanstalk'
 require 'mist/website'
 require 'mist/system_command'
+require 'mist/dns'
 require 'mist/deployment'
 
 module Mist
