@@ -9,7 +9,7 @@ module Mist
       if options.environment?
         deployment.deploy_latest_to_environment options.environment
       else
-        deployment.deploy_latest
+        deployment.deploy_latest_to_stack
       end
     end
 

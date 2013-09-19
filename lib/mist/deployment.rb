@@ -8,7 +8,7 @@ module Mist
       @logger = options.fetch(:logger, Mist.logger)
     end
 
-    def deploy_latest
+    def deploy_latest_to_stack
       current_environment_name = website(environment.dns_config[:domain]).current_environment
       next_environment = environment.find_next_environment(current_environment_name)
       next_environment_name = next_environment[:name]
