@@ -9,8 +9,14 @@ describe Mist::Website do
     When { website.warm }
     Then {
       expect(system_command).to have_received(:run_command_with_output).
-                                    with("curl --connect-timeout 300 --digest -u 'pinchmebeta:pinchmenyc' --write-out '%{http_code}' --silent --output /dev/null 'http://test.com'").
-                                    exactly(20).times
+                                    with('curl',
+                                         '--connect-timeout 300',
+                                         '--digest',
+                                         "-u 'pinchmebeta:pinchmenyc'",
+                                         "--write-out '%{http_code}'",
+                                         '--silent',
+                                         '--output /dev/null',
+                                         "'http://test.com'").exactly(20).times
     }
   end
 
@@ -48,7 +54,7 @@ Connection: keep-alive
       When(:current_environment) { website.current_environment }
       Then {
         expect(system_command).to have_received(:run_command_with_output).
-                                      with("curl --connect-timeout 300 --silent -I 'http://test.com'")
+                                      with('curl', '--connect-timeout 300', '--silent', "-I 'http://test.com'")
       }
       Then { expect(current_environment).to eq('PINCHme-US-QA-A')}
     end
@@ -60,7 +66,7 @@ Connection: keep-alive
       When(:current_environment) { website.current_environment }
       Then {
         expect(system_command).to have_received(:run_command_with_output).
-                                      with("curl --connect-timeout 300 --silent -I 'http://test.com'")
+                                      with('curl', '--connect-timeout 300', '--silent', "-I 'http://test.com'")
       }
       Then {
         current_environment == Failure(RuntimeError, "Could not find the current environment in 'X-Environment-Name'")

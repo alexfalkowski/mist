@@ -12,8 +12,14 @@ module Mist
       logger.info("About to warm up the the website at URL '#{uri}'")
 
       (1..20).each {
-        curl_command = "curl --connect-timeout 300 --digest -u 'pinchmebeta:pinchmenyc' --write-out '%{http_code}' --silent --output /dev/null '#{uri}'"
-        status_code = command.run_command_with_output(curl_command)
+        status_code = command.run_command_with_output('curl',
+                                                      '--connect-timeout 300',
+                                                      '--digest',
+                                                      "-u 'pinchmebeta:pinchmenyc'",
+                                                      "--write-out '%{http_code}'",
+                                                      '--silent',
+                                                      '--output /dev/null',
+                                                      "'#{uri}'")
 
         raise "Could not warm up website on URL '#{uri}' as we got a status code of '#{status_code}'" unless status_code == '200'
       }
@@ -22,7 +28,7 @@ module Mist
     end
 
     def current_environment
-      environment = headers.split(/\r?\n/).select { |line| line.start_with?(ENVIRONMENT_NAME_HEADER)}.first
+      environment = headers.split(/\r?\n/).select { |line| line.start_with?(ENVIRONMENT_NAME_HEADER) }.first
 
       unless environment
         raise "Could not find the current environment in '#{ENVIRONMENT_NAME_HEADER}'"
@@ -38,8 +44,7 @@ module Mist
     attr_reader :uri, :command, :logger
 
     def headers
-      curl_command = "curl --connect-timeout 300 --silent -I '#{uri}'"
-      command.run_command_with_output(curl_command)
+      command.run_command_with_output('curl', '--connect-timeout 300', '--silent', "-I '#{uri}'")
     end
   end
 end

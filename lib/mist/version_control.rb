@@ -1,11 +1,12 @@
 module Mist
   class VersionControl
-    def initialize(environment,
-        home_path = Dir.home,
-        system_command = SystemCommand.new,
-        logger = Mist.logger)
-      @environment, @home_path, @system_command = environment, home_path, system_command
-      @logger = logger
+    def initialize(options = {})
+      @environment = options[:environment]
+      @home_path = options.fetch(:home_path, Dir.home)
+      @system_command = options.fetch(:system_command, SystemCommand.new)
+      @logger = options.fetch(:logger, Mist.logger)
+      @cli_location = options.fetch(:cli_location, ENV['CLI_LOCATION'])
+
       prepare
     end
 
@@ -16,7 +17,7 @@ module Mist
 
     private
 
-    attr_reader :environment, :home_path, :system_command, :logger
+    attr_reader :environment, :home_path, :system_command, :logger, :cli_location
 
     def prepare
       clone_repository unless Dir.exists?(repository_path)
@@ -28,27 +29,30 @@ module Mist
     def add_deploy_extensions
       logger.info('Adding AWS deployment tools.')
       Dir.chdir(repository_path) do
-        run_system_command aws_dev_tools_script_path
+        system_command.run_command aws_dev_tools_script_path
       end
     end
 
     def clone_repository
       logger.info('Cloning the repository.')
       Dir.mkdir(repository_path)
-      run_system_command "git clone #{environment.git_config[:repository_uri]} #{repository_path}"
+      system_command.run_command 'git clone',
+                                 environment.git_config[:repository_uri],
+                                 repository_path,
+                                 '-q'
     end
 
     def pull_latest_changes
       logger.info('Getting the latest version.')
       Dir.chdir(repository_path) do
-        run_system_command 'git pull'
+        system_command.run_command 'git pull', '-q'
       end
     end
 
     def push_to_aws(environment)
       logger.info('Pushing to AWS.')
       Dir.chdir(repository_path) do
-        run_system_command "git aws.push --environment #{environment}"
+        system_command.run_command 'git aws.push', "--environment #{environment}", '> /dev/null 2>&1'
       end
     end
 
@@ -82,10 +86,6 @@ module Mist
       }
     end
 
-    def run_system_command(command)
-      system_command.run_command "#{command} > /dev/null 2>&1"
-    end
-
     def repository_path
       @repository_path ||= File.join(environment.git_config[:local_path],
                                      environment.git_config[:repository_name])
@@ -99,19 +99,23 @@ module Mist
       @aws_credential_file ||= File.join(home_path, elastic_beanstalk_dir_name, 'aws_credential_file')
     end
 
+    def aws_dev_tools_path
+      @aws_dev_tools_path ||= File.join(repository_path, '.git', aws_dev_tools_dir_name)
+    end
+
+    def aws_dev_tools_script_path
+      @aws_dev_tools_script_path ||= File.join(cli_location,
+                                               aws_dev_tools_dir_name,
+                                               'Linux',
+                                               'AWSDevTools-RepositorySetup.sh')
+    end
+
     def elastic_beanstalk_dir_name
       '.elasticbeanstalk'
     end
 
-    def aws_dev_tools_path
-      @aws_dev_tools_path ||= File.join(repository_path, '.git', 'AWSDevTools')
-    end
-
-    def aws_dev_tools_script_path
-      @aws_dev_tools_script_path ||= File.join(ENV['CLI_LOCATION'],
-                                               'AWSDevTools',
-                                               'Linux',
-                                               'AWSDevTools-RepositorySetup.sh')
+    def aws_dev_tools_dir_name
+      'AWSDevTools'
     end
   end
 end
