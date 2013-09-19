@@ -1,7 +1,5 @@
 module Mist
   class ElasticBeanstalk
-    attr_reader :environment, :beanstalk, :logger
-
     def initialize(environment, beanstalk = nil, logger = Mist.logger)
       @environment = environment
       @beanstalk = beanstalk || AWS::ElasticBeanstalk.new(access_key_id: environment.eb_config[:access_key_id],
@@ -26,6 +24,8 @@ module Mist
     end
 
     private
+
+    attr_reader :environment, :beanstalk, :logger
 
     def validate_events(events)
       errors = events.select { |e| e[:severity] == 'ERROR' }

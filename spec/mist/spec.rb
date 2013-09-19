@@ -1,4 +1,4 @@
-module TestEnvironment
+module Spec
   def self.environment
     ENV[Mist::Environment::AWS_DNS_ACCESS_KEY_ID] = 'AWS_DNS_ACCESS_KEY_ID'
     ENV[Mist::Environment::AWS_DNS_SECRET_KEY] = 'AWS_DNS_SECRET_KEY'

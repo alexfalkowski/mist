@@ -4,6 +4,6 @@ require 'tempfile'
 require 'rspec/given'
 
 require 'mist'
-require 'mist/test_environment'
+require 'mist/spec'
 
 Mist.logger = Logger.new('/dev/null')

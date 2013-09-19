@@ -1,7 +1,5 @@
 module Mist
   class VersionControl
-    attr_reader :environment, :home_path, :system_command, :logger
-
     def initialize(environment,
         home_path = Dir.home,
         system_command = SystemCommand.new,
@@ -17,6 +15,8 @@ module Mist
     end
 
     private
+
+    attr_reader :environment, :home_path, :system_command, :logger
 
     def prepare
       clone_repository unless Dir.exists?(repository_path)

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Mist::Dns do
-  let(:environment) { TestEnvironment.environment }
+  let(:environment) { Spec.environment }
   let(:options) {
     {
         hosted_zone_id: 'id',
