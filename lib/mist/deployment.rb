@@ -10,17 +10,17 @@ module Mist
 
     def deploy_latest
       current_environment_name = website(environment.dns_config[:domain]).current_environment
-      other_environment = environment.find_other_environment(current_environment_name)
-      other_environment_name = other_environment[:name]
-      other_environment_uri = other_environment[:uri]
+      next_environment = environment.find_next_environment(current_environment_name)
+      next_environment_name = next_environment[:name]
+      next_environment_uri = next_environment[:uri]
 
-      version_control.push_latest_version other_environment_name
-      eb.wait_for_environment other_environment_name, Time.now.utc.iso8601
-      website(other_environment_uri).warm
+      version_control.push_latest_version next_environment_name
+      eb.wait_for_environment next_environment_name, Time.now.utc.iso8601
+      website(next_environment_uri).warm
 
-      dns.update_endpoint other_environment_name
+      dns.update_endpoint next_environment_name
 
-      logger.info("Successfully deployed to environment '#{other_environment_name}' with URL '#{other_environment_uri}'")
+      logger.info("Successfully deployed to environment '#{next_environment_name}' with URL '#{next_environment_uri}'")
     end
 
     private

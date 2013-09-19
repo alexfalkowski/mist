@@ -59,7 +59,7 @@ module Mist
       eb_config[:environments].select { |e| e[:name] == name }.first
     end
 
-    def find_other_environment(name)
+    def find_next_environment(name)
       eb_config[:environments].select { |e| e[:name] != name }.first
     end
 

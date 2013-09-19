@@ -8,13 +8,13 @@ module Mist
     end
 
     def update_endpoint(environment_name)
-      current_environment = environment.find_other_environment(environment_name)
-      other_environment = environment.find_environment(environment_name)
+      current_environment = environment.find_next_environment(environment_name)
+      next_environment = environment.find_environment(environment_name)
 
       options = {
           hosted_zone_id: zone[:id],
           change_batch: {
-              comment: "Changing host from '#{current_environment[:name]}' to '#{other_environment[:name]}'",
+              comment: "Changing host from '#{current_environment[:name]}' to '#{next_environment[:name]}'",
               changes: [
                   {
                       action: 'DELETE',
@@ -31,7 +31,7 @@ module Mist
                           name: environment.dns_config[:domain],
                           type: 'CNAME',
                           ttl: 300,
-                          resource_records: [{value: strip_protocol(other_environment[:uri])}]
+                          resource_records: [{value: strip_protocol(next_environment[:uri])}]
                       }
                   }
               ]
@@ -39,7 +39,7 @@ module Mist
       }
 
       dns.client.change_resource_record_sets(options)
-      logger.info("Changed host from '#{current_environment[:name]}' to '#{other_environment[:name]}'")
+      logger.info("Changed host from '#{current_environment[:name]}' to '#{next_environment[:name]}'")
     end
 
     private
