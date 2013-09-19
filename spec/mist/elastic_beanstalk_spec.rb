@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Mist::ElasticBeanstalk do
-  let(:environment) { TestEnvironment.environment }
+  let(:environment) { Spec.environment }
 
   context 'failure event' do
     Given(:aws_eb_client) { double('AWS::Client',

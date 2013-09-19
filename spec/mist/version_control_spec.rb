@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Mist::VersionControl do
-  let(:environment) { TestEnvironment.environment }
+  let(:environment) { Spec.environment }
 
   let(:aws_dev_tools_path) {
     File.join(environment.git_config[:local_path], environment.git_config[:repository_name], '.git', 'AWSDevTools')
