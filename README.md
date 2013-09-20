@@ -62,3 +62,11 @@ This allows the release manager to swap the DNS endpoint within a stack to point
 This allows the release manager to warm a specific environment.
 
 > ./mist warm -s QA -e PINCHme-US-QA-A
+
+### Version
+
+This allows the release manager to get an idea of what version is running in a stack or an environment within a stack.
+
+> ./mist version -s QA
+
+> ./mist version -s QA -e PINCHme-US-QA-A
