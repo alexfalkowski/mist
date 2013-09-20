@@ -19,11 +19,9 @@ module Mist
     end
 
     def deploy_latest_to_environment(name)
-      current_environment = environment.find_environment(name)
-
-      raise "Could not find environment with name '#{name}'" unless current_environment
-
+      current_environment = find_environment(name)
       current_environment_uri = current_environment[:uri]
+
       deploy(name, current_environment_uri)
       log_success(name, current_environment_uri)
     end
@@ -32,6 +30,11 @@ module Mist
       next_environment = environment.find_next_environment(current_environment_name)
 
       dns.update_endpoint next_environment[:name]
+    end
+
+    def warm_environment(name)
+      current_environment = find_environment(name)
+      warm current_environment[:uri]
     end
 
     private
@@ -45,7 +48,17 @@ module Mist
     def deploy(name, uri)
       version_control.push_latest_version name
       eb.wait_for_environment name, current_time
+      warm uri
+    end
+
+    def warm(uri)
       website(uri).warm
+    end
+
+    def find_environment(name)
+      environment.find_environment(name).tap { |env|
+        raise "Could not find environment with name '#{name}'" unless env
+      }
     end
 
     def log_success(name, uri)
