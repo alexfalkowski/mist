@@ -22,7 +22,7 @@ module Mist
       end
     end
 
-    desc 'deploy', 'The mist deployment tool.'
+    desc 'deploy', 'Deploy a specific stack or an environment within a stack.'
     method_option :stack, aliases: stack_alias, desc: stack_message, default: stack_default
     method_option :environment, aliases: environment_alias, desc: environment_message
     def deploy
