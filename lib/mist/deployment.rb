@@ -3,7 +3,7 @@ module Mist
     def initialize(options = {})
       @environment = options.fetch(:environment, Mist::Environment.new(options[:stack]))
       @version_control = options.fetch(:version_control, Mist::VersionControl.new(environment: environment))
-      @eb = options.fetch(:eb, Mist::ElasticBeanstalk.new(environment))
+      @eb = options.fetch(:eb, Mist::ElasticBeanstalk.new(environment: environment))
       @dns = options.fetch(:dns, Mist::Dns.new(environment))
       @logger = options.fetch(:logger, Mist.logger)
     end
