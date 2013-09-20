@@ -50,6 +50,19 @@ module Mist
       deployment.warm_environment options.environment
     end
 
+    desc 'version', 'The version of specific stack or an environment within a stack.'
+    method_option :stack, aliases: stack_alias, desc: stack_message, default: stack_default
+    method_option :environment, aliases: environment_alias, desc: environment_message
+    def version
+      deployment = deployment(options.stack)
+
+      if options.environment?
+        deployment.environment_version options.environment
+      else
+        deployment.stack_version
+      end
+    end
+
     private
 
     def deployment(stack)

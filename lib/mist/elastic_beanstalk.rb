@@ -7,9 +7,9 @@ module Mist
       @logger = options.fetch(:logger, Mist.logger)
     end
 
-    def wait_for_environment(environment, deploy_date)
+    def wait_for_environment(name, deploy_date)
       options = {
-          environment_name: environment,
+          environment_name: name,
           start_time: deploy_date
       }
 
@@ -21,6 +21,17 @@ module Mist
       end
 
       result
+    end
+
+    def version(name)
+      options = {
+          application_name: environment.eb_config[:application_name],
+          environment_names: [name]
+      }
+
+      beanstalk.client.describe_environments(options)[:environments].first[:version_label].tap { |version|
+        logger.info("The current version for environment '#{name}' is '#{version}'")
+      }
     end
 
     private
