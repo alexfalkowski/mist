@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+setup_package_dependencies () {
+    sudo apt-get -q -y install git
+    sudo apt-get -q -y install make
+    sudo apt-get -q -y install libxslt-dev
+    sudo apt-get -q -y install libxml2-dev
+    sudo apt-get -q -y install ruby1.9.1-dev
+    sudo apt-get -q -y install mysql-client-5.5
+    sudo apt-get -q -y install unzip
+}
+
+setup_package_dependencies
