@@ -37,6 +37,15 @@ module Mist
       warm current_environment[:uri]
     end
 
+    def stack_version
+      eb.version current_environment_name
+    end
+
+    def environment_version(name)
+      current_environment = find_environment(name)
+      eb.version current_environment[:name]
+    end
+
     private
 
     attr_reader :environment, :version_control, :eb, :dns, :logger
