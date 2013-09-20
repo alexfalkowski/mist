@@ -48,7 +48,7 @@ module Mist
     end
 
     def website(uri)
-      Mist::Website.new(uri)
+      Mist::Website.new(uri: uri)
     end
   end
 end

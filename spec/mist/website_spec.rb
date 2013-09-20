@@ -5,7 +5,7 @@ describe Mist::Website do
 
   context 'successful warm up' do
     Given(:system_command) { double('SystemCommand', run_command_with_output: '200') }
-    Given(:website) { Mist::Website.new(uri, system_command) }
+    Given(:website) { Mist::Website.new(uri: uri, system_command: system_command) }
     When { website.warm }
     Then {
       expect(system_command).to have_received(:run_command_with_output).
@@ -22,7 +22,7 @@ describe Mist::Website do
 
   context 'unsuccessful warm up' do
     Given(:system_command) { double('SystemCommand', run_command_with_output: '500') }
-    Given(:website) { Mist::Website.new(uri, system_command) }
+    Given(:website) { Mist::Website.new(uri: uri, system_command: system_command) }
     When(:result) { website.warm }
     Then {
       result == Failure(RuntimeError, "Could not warm up website on URL 'http://test.com' as we got a status code of '500'")
@@ -50,7 +50,7 @@ Connection: keep-alive
         ]
       }
       Given(:system_command) { double('SystemCommand', run_command_with_output: headers.lstrip) }
-      Given(:website) { Mist::Website.new(uri, system_command) }
+      Given(:website) { Mist::Website.new(uri: uri, system_command: system_command) }
       When(:current_environment) { website.current_environment }
       Then {
         expect(system_command).to have_received(:run_command_with_output).
@@ -62,7 +62,7 @@ Connection: keep-alive
     context 'does not have X-Environment-Name' do
       Given(:headers) { '' }
       Given(:system_command) { double('SystemCommand', run_command_with_output: headers) }
-      Given(:website) { Mist::Website.new(uri, system_command) }
+      Given(:website) { Mist::Website.new(uri: uri, system_command: system_command) }
       When(:current_environment) { website.current_environment }
       Then {
         expect(system_command).to have_received(:run_command_with_output).
@@ -72,7 +72,5 @@ Connection: keep-alive
         current_environment == Failure(RuntimeError, "Could not find the current environment in 'X-Environment-Name'")
       }
     end
-
-
   end
 end
