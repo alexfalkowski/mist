@@ -47,7 +47,7 @@ describe Mist::Dns do
       )
     }
     Given(:aws_route53) { double('AWS::Route53', client: aws_route53_client) }
-    Given(:dns) { Mist::Dns.new(environment, aws_route53) }
+    Given(:dns) { Mist::Dns.new(environment: environment, dns: aws_route53) }
     When(:result) { dns.update_endpoint('PINCHme-US-QA-B') }
     Then { expect(aws_route53_client).to have_received(:change_resource_record_sets).with(options) }
   end

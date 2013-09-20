@@ -1,8 +1,8 @@
 module Mist
   class SystemCommand
-    def initialize(kernel = Kernel, logger = Mist.logger)
-      @kernel = kernel
-      @logger = logger
+    def initialize(options = {})
+      @kernel = options.fetch(:kernel, Kernel)
+      @logger = options.fetch(:logger, Mist.logger)
     end
 
     def run_command_with_output(command, *parameters)

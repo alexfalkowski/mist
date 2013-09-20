@@ -47,6 +47,18 @@ This allows the release manager to deploy to a specific stack
 
 ### Deploy an environment
 
-This allows the release manager to deploy to a specific environment
+This allows the release manager to deploy to a specific environment.
 
 > ./mist deploy -s QA -e PINCHme-US-QA-A
+
+### Swap an environment
+
+This allows the release manager to swap the DNS endpoint within a stack to point to the next environment.
+
+> ./mist swap -s QA
+
+### Warm an environment
+
+This allows the release manager to warm a specific environment.
+
+> ./mist warm -s QA -e PINCHme-US-QA-A

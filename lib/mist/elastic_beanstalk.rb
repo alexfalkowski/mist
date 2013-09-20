@@ -1,10 +1,10 @@
 module Mist
   class ElasticBeanstalk
-    def initialize(environment, beanstalk = nil, logger = Mist.logger)
-      @environment = environment
-      @beanstalk = beanstalk || AWS::ElasticBeanstalk.new(access_key_id: environment.eb_config[:access_key_id],
-                                                          secret_access_key: environment.eb_config[:secret_key])
-      @logger = logger
+    def initialize(options = {})
+      @environment = options[:environment]
+      @beanstalk = options.fetch(:beanstalk, AWS::ElasticBeanstalk.new(access_key_id: environment.eb_config[:access_key_id],
+                                                                       secret_access_key: environment.eb_config[:secret_key]))
+      @logger = options.fetch(:logger, Mist.logger)
     end
 
     def wait_for_environment(environment, deploy_date)
