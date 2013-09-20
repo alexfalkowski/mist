@@ -2,7 +2,7 @@ module Mist
   class Deployment
     def initialize(options = {})
       @environment = options.fetch(:environment, Mist::Environment.new(options[:stack]))
-      @version_control = options.fetch(:version_control, Mist::VersionControl.new({environment: environment}))
+      @version_control = options.fetch(:version_control, Mist::VersionControl.new(environment: environment))
       @eb = options.fetch(:eb, Mist::ElasticBeanstalk.new(environment))
       @dns = options.fetch(:dns, Mist::Dns.new(environment))
       @logger = options.fetch(:logger, Mist.logger)
