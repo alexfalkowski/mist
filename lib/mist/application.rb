@@ -13,6 +13,13 @@ module Mist
       end
     end
 
+    desc 'swap', 'Swaps the DNS endpoint.'
+    method_option :stack, aliases: '-s', desc: 'Deploy a stack, e.g QA|UAT|LIVE', default: 'QA'
+    def swap
+      deployment = deployment(options.stack)
+      deployment.update_endpoint
+    end
+
     private
 
     def deployment(stack)

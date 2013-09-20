@@ -38,8 +38,8 @@ module Mist
           }
       }
 
-      dns.client.change_resource_record_sets(options)
-      logger.info("Changed host from '#{current_environment[:name]}' to '#{next_environment[:name]}'")
+      response = dns.client.change_resource_record_sets(options)
+      logger.info("Changed host from '#{current_environment[:name]}' to '#{next_environment[:name]}', with response '#{response.inspect}'")
     end
 
     private

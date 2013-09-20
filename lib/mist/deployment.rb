@@ -9,7 +9,6 @@ module Mist
     end
 
     def deploy_latest_to_stack
-      current_environment_name = website(environment.dns_config[:domain]).current_environment
       next_environment = environment.find_next_environment(current_environment_name)
       next_environment_name = next_environment[:name]
       next_environment_uri = next_environment[:uri]
@@ -29,9 +28,19 @@ module Mist
       log_success(name, current_environment_uri)
     end
 
+    def update_endpoint
+      next_environment = environment.find_next_environment(current_environment_name)
+
+      dns.update_endpoint next_environment[:name]
+    end
+
     private
 
     attr_reader :environment, :version_control, :eb, :dns, :logger
+
+    def current_environment_name
+      @current_environment_name ||= website(environment.dns_config[:domain]).current_environment
+    end
 
     def deploy(name, uri)
       version_control.push_latest_version name
