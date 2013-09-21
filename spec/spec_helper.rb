@@ -5,7 +5,7 @@ require 'rspec/given'
 
 require 'mist'
 require 'mist/spec'
-require 'mist/fake_system_command'
+require 'mist/spec_system_command'
 
 Mist.logger = Logger.new('/dev/null')
 

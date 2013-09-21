@@ -1,4 +1,4 @@
-class FakeSystemCommand < Mist::SystemCommand
+class SpecSystemCommand < Mist::SystemCommand
   def run_command_with_output(command, *parameters)
     super
   end
