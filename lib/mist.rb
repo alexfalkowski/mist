@@ -7,6 +7,7 @@ require 'new_relic_api'
 
 require 'mist/version_control'
 require 'mist/environment'
+require 'mist/environment_variable'
 require 'mist/elastic_beanstalk'
 require 'mist/website'
 require 'mist/system_command'
