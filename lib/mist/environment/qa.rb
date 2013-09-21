@@ -15,4 +15,8 @@ module Mist::Environment::QA
   def domain
     'qa.pinchme.com.'
   end
+
+  def application_name
+    'PINCHme-US-QA'
+  end
 end

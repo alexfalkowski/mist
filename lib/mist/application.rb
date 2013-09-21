@@ -63,6 +63,13 @@ module Mist
       end
     end
 
+    desc 'mark', 'Mark a version with newrelic of a specific stack.'
+    method_option :stack, aliases: stack_alias, desc: stack_message, default: stack_default
+    def mark
+      deployment = deployment(options.stack)
+      deployment.mark_stack_version
+    end
+
     private
 
     def deployment(stack)

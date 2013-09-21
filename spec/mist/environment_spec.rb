@@ -64,4 +64,28 @@ describe Mist::Environment do
       end
     end
   end
+
+  context 'NEWRELIC environment' do
+    context 'with environment variables set' do
+      Given { ENV[Mist::Environment::AWS_APP_ACCESS_KEY_ID] = 'AWS_ACCESS_KEY_ID' }
+      Given { ENV[Mist::Environment::AWS_APP_SECRET_KEY] = 'AWS_ACCESS_KEY_ID' }
+      Given { ENV[Mist::Environment::AWS_DNS_ACCESS_KEY_ID] = 'AWS_ACCESS_KEY_ID' }
+      Given { ENV[Mist::Environment::AWS_DNS_SECRET_KEY] = 'AWS_ACCESS_KEY_ID' }
+      Given { ENV[Mist::Environment::NEWRELIC_API_KEY] = 'NEWRELIC_API_KEY' }
+      When(:environment) { Mist::Environment.new('qa') }
+      Then { environment != Failure(RuntimeError) }
+      Then { environment.newrelic_config[:api_key] ==  'NEWRELIC_API_KEY'}
+      Then { environment.newrelic_config[:application_name] ==  'PINCHme-US-QA'}
+    end
+
+    context 'without environment variables set' do
+      Given { ENV[Mist::Environment::AWS_APP_ACCESS_KEY_ID] = 'AWS_ACCESS_KEY_ID' }
+      Given { ENV[Mist::Environment::AWS_APP_SECRET_KEY] = 'AWS_ACCESS_KEY_ID' }
+      Given { ENV[Mist::Environment::AWS_DNS_ACCESS_KEY_ID] = 'AWS_ACCESS_KEY_ID' }
+      Given { ENV[Mist::Environment::AWS_DNS_SECRET_KEY] = 'AWS_ACCESS_KEY_ID' }
+      Given { ENV[Mist::Environment::NEWRELIC_API_KEY] = nil }
+      When(:environment) { Mist::Environment.new('qa') }
+      Then { environment == Failure(RuntimeError, 'Please specify the environment variable NEWRELIC_API_KEY') }
+    end
+  end
 end
