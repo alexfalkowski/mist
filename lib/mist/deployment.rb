@@ -1,12 +1,12 @@
 module Mist
   class Deployment
     def initialize(options = {})
-      @environment = options.fetch(:environment, Mist::Environment.new(options[:stack]))
-      @version_control = options.fetch(:version_control, Mist::VersionControl.new(environment: environment))
-      @eb = options.fetch(:eb, Mist::ElasticBeanstalk.new(environment: environment))
+      @environment = options.fetch(:environment) { Mist::Environment.new(options[:stack]) }
+      @version_control = options.fetch(:version_control) { Mist::VersionControl.new(environment: environment) }
+      @eb = options.fetch(:eb) { Mist::ElasticBeanstalk.new(environment: environment) }
       @dns = options.fetch(:dns, Mist::Dns.new(environment: environment))
       @logger = options.fetch(:logger, Mist.logger)
-      @newrelic = options.fetch(:logger, Mist::Newrelic.new(environment: environment))
+      @newrelic = options.fetch(:newrelic) { Mist::Newrelic.new(environment: environment) }
     end
 
     def deploy_latest_to_stack

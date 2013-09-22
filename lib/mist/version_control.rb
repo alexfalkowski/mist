@@ -2,8 +2,8 @@ module Mist
   class VersionControl
     def initialize(options = {})
       @environment = options[:environment]
-      @home_path = options.fetch(:home_path, Dir.home)
-      @system_command = options.fetch(:system_command, SystemCommand.new)
+      @home_path = options.fetch(:home_path) { Dir.home }
+      @system_command = options.fetch(:system_command) { SystemCommand.new }
       @logger = options.fetch(:logger, Mist.logger)
       @cli_location = options.fetch(:cli_location, ENV['CLI_LOCATION'])
 

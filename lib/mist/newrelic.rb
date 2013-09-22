@@ -5,7 +5,7 @@ module Mist
       @logger = options.fetch(:logger, Mist.logger)
       @newrelic = options.fetch(:newrelic, NewRelicApi)
       @newrelic_deployment = options.fetch(:newrelic_deployment, NewRelicApi::Deployment)
-      @login_name = options.fetch(:login_name, Etc.getlogin)
+      @login_name = options.fetch(:login_name) { Etc.getlogin }
 
       newrelic.api_key = environment.newrelic_config[:api_key]
     end

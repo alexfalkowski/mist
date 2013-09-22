@@ -2,8 +2,10 @@ module Mist
   class Dns
     def initialize(options = {})
       @environment = options[:environment]
-      @dns = options.fetch(:dns, AWS::Route53.new(access_key_id: environment.dns_config[:access_key_id],
-                                                  secret_access_key: environment.dns_config[:secret_key]))
+      @dns = options.fetch(:dns) {
+        AWS::Route53.new(access_key_id: environment.dns_config[:access_key_id],
+                         secret_access_key: environment.dns_config[:secret_key])
+      }
       @logger = options.fetch(:logger, Mist.logger)
     end
 

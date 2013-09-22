@@ -4,7 +4,7 @@ module Mist
 
     def initialize(options = {})
       @uri = URI.parse(options[:uri])
-      @system_command = options.fetch(:system_command, SystemCommand.new)
+      @system_command = options.fetch(:system_command) { SystemCommand.new }
       @logger = options.fetch(:logger, Mist.logger)
     end
 
