@@ -73,7 +73,7 @@ module Mist
     private
 
     def deployment(stack)
-      @deployment ||= Mist::Deployment.new({stack: stack})
+      @deployment ||= Mist::Deployment.new(stack: stack)
     end
   end
 end
