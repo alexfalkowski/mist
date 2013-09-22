@@ -20,8 +20,7 @@ describe Mist::VersionControl do
     When(:version_control) {
       Mist::VersionControl.new(environment: environment,
                                home_path: home_path,
-                               system_command: system_command,
-                               cli_location: CLI_LOCATION)
+                               system_command: system_command)
     }
     Then { Dir.exists?(repository_path) }
   end
@@ -31,8 +30,7 @@ describe Mist::VersionControl do
     When(:version_control) {
       Mist::VersionControl.new(environment: environment,
                                home_path: home_path,
-                               system_command: system_command,
-                               cli_location: CLI_LOCATION)
+                               system_command: system_command)
     }
     Then { Dir.exists?(aws_dev_tools_path) }
   end
@@ -42,8 +40,7 @@ describe Mist::VersionControl do
     When(:version_control) {
       Mist::VersionControl.new(environment: environment,
                                home_path: home_path,
-                               system_command: system_command,
-                               cli_location: CLI_LOCATION)
+                               system_command: system_command)
     }
     Then { File.exists?(eb_config_file) }
     Then { File.read(eb_config_file).include? 'ApplicationName=PINCHme-US' }
@@ -57,8 +54,7 @@ describe Mist::VersionControl do
     When(:version_control) {
       Mist::VersionControl.new(environment: environment,
                                home_path: home_path,
-                               system_command: system_command,
-                               cli_location: CLI_LOCATION)
+                               system_command: system_command)
     }
     Then { File.exists?(aws_credential_file) }
     Then { File.read(aws_credential_file).include? 'AWSAccessKeyId=AWS_APP_ACCESS_KEY_ID' }
@@ -70,8 +66,7 @@ describe Mist::VersionControl do
     Given(:version_control) {
       Mist::VersionControl.new(environment: environment,
                                home_path: home_path,
-                               system_command: system_command,
-                               cli_location: CLI_LOCATION)
+                               system_command: system_command)
     }
     When { version_control.push_latest_version('test') }
     Then { expect(system_command).to have_received(:run_command).with('git pull', '-q') }

@@ -70,6 +70,13 @@ module Mist
       deployment.mark_stack_version
     end
 
+    desc 'setup', 'Setup the mist.'
+    method_option :email, desc: 'Your email address.', required: true
+    def setup
+      setup = Mist::Prerequisites.new(email: options.email)
+      setup.setup
+    end
+
     private
 
     def deployment(stack)
