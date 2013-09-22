@@ -16,7 +16,7 @@ describe Mist::VersionControl do
   let(:aws_credential_file) { File.join(home_path, '.elasticbeanstalk', 'aws_credential_file') }
 
   context 'clone repository' do
-    Given(:system_command) { FakeSystemCommand.new }
+    Given(:system_command) { SpecSystemCommand.new }
     When(:version_control) {
       Mist::VersionControl.new(environment: environment,
                                home_path: home_path,
@@ -27,7 +27,7 @@ describe Mist::VersionControl do
   end
 
   context 'setup AWS dev tools' do
-    Given(:system_command) { FakeSystemCommand.new }
+    Given(:system_command) { SpecSystemCommand.new }
     When(:version_control) {
       Mist::VersionControl.new(environment: environment,
                                home_path: home_path,
@@ -38,7 +38,7 @@ describe Mist::VersionControl do
   end
 
   context 'elastic beanstalk config' do
-    Given(:system_command) { FakeSystemCommand.new }
+    Given(:system_command) { SpecSystemCommand.new }
     When(:version_control) {
       Mist::VersionControl.new(environment: environment,
                                home_path: home_path,
@@ -53,7 +53,7 @@ describe Mist::VersionControl do
   end
 
   context 'elastic beanstalk aws credential file' do
-    Given(:system_command) { FakeSystemCommand.new }
+    Given(:system_command) { SpecSystemCommand.new }
     When(:version_control) {
       Mist::VersionControl.new(environment: environment,
                                home_path: home_path,

@@ -8,11 +8,14 @@ module Mist
 
     AWS_DNS_SECRET_KEY = 'AWS_DNS_SECRET_KEY'
 
+    NEWRELIC_API_KEY = 'NEWRELIC_API_KEY'
+
     def initialize(name)
       raise error_message(AWS_APP_ACCESS_KEY_ID) unless app_access_key_id
       raise error_message(AWS_APP_SECRET_KEY) unless app_secret_key
       raise error_message(AWS_DNS_ACCESS_KEY_ID) unless dns_access_key_id
       raise error_message(AWS_DNS_SECRET_KEY) unless dns_secret_key
+      raise error_message(NEWRELIC_API_KEY) unless newrelic_api_key
 
       include_environment_information name
     end
@@ -39,6 +42,10 @@ module Mist
                   access_key_id: dns_access_key_id,
                   secret_key: dns_secret_key,
               }
+          },
+          newrelic: {
+              api_key: newrelic_api_key,
+              application_name: application_name
           }
       }
     end
@@ -53,6 +60,10 @@ module Mist
 
     def git_config
       variables[:git]
+    end
+
+    def newrelic_config
+      variables[:newrelic]
     end
 
     def find_environment(name)
@@ -90,6 +101,10 @@ module Mist
 
     def dns_secret_key
       ENV[AWS_DNS_SECRET_KEY]
+    end
+
+    def newrelic_api_key
+      ENV[NEWRELIC_API_KEY]
     end
   end
 end

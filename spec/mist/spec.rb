@@ -4,6 +4,7 @@ module Spec
     ENV[Mist::Environment::AWS_DNS_SECRET_KEY] = 'AWS_DNS_SECRET_KEY'
     ENV[Mist::Environment::AWS_APP_ACCESS_KEY_ID] = 'AWS_APP_ACCESS_KEY_ID'
     ENV[Mist::Environment::AWS_APP_SECRET_KEY] = 'AWS_APP_SECRET_KEY'
+    ENV[Mist::Environment::NEWRELIC_API_KEY] = 'NEWRELIC_API_KEY'
 
     environment = Mist::Environment.new('qa')
     environment.variables[:git][:local_path] = Dir.mktmpdir

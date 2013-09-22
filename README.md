@@ -70,3 +70,10 @@ This allows the release manager to get an idea of what version is running in a s
 > ./mist version -s QA
 
 > ./mist version -s QA -e PINCHme-US-QA-A
+
+### Marking Deployment
+
+At PINCHme we use an awesome tool called [newrelic](http://newrelic.com/). When a deployment is finished we mark a
+deployment with newrelic. If you want as a release manager you can do that yourself.
+
+> ./mist mark

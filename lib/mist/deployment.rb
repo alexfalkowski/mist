@@ -6,6 +6,7 @@ module Mist
       @eb = options.fetch(:eb, Mist::ElasticBeanstalk.new(environment: environment))
       @dns = options.fetch(:dns, Mist::Dns.new(environment: environment))
       @logger = options.fetch(:logger, Mist.logger)
+      @newrelic = options.fetch(:logger, Mist::Newrelic.new(environment: environment))
     end
 
     def deploy_latest_to_stack
@@ -15,6 +16,7 @@ module Mist
 
       deploy(next_environment_name, next_environment_uri)
       dns.update_endpoint next_environment_name
+      newrelic.mark_deployment environment_version(next_environment_name)
       log_success(next_environment_name, next_environment_uri)
     end
 
@@ -46,9 +48,13 @@ module Mist
       eb.version current_environment[:name]
     end
 
+    def mark_stack_version
+      newrelic.mark_deployment stack_version
+    end
+
     private
 
-    attr_reader :environment, :version_control, :eb, :dns, :logger
+    attr_reader :environment, :version_control, :eb, :dns, :logger, :newrelic
 
     def current_environment_name
       @current_environment_name ||= website(environment.dns_config[:domain]).current_environment
