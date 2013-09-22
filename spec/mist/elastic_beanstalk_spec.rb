@@ -15,7 +15,9 @@ describe Mist::ElasticBeanstalk do
       Given(:aws_eb) { double('AWS::ElasticBeanstalk', client: aws_eb_client) }
       Given(:eb) { Mist::ElasticBeanstalk.new(environment: environment, beanstalk: aws_eb) }
       When(:result) { eb.wait_for_environment('TEST-ENV', Time.now.utc.iso8601) }
-      Then { result == :failure }
+      Then {
+        result == Failure(RuntimeError, 'There was an error with elastic beanstalk, please consult the logs.')
+      }
     end
 
     context 'success event' do
@@ -29,7 +31,9 @@ describe Mist::ElasticBeanstalk do
       Given(:aws_eb) { double('AWS::ElasticBeanstalk', client: aws_eb_client) }
       Given(:eb) { Mist::ElasticBeanstalk.new(environment: environment, beanstalk: aws_eb) }
       When(:result) { eb.wait_for_environment('TEST-ENV', Time.now.utc.iso8601) }
-      Then { result == :success }
+      Then {
+        result != Failure(RuntimeError)
+      }
     end
   end
 

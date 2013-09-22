@@ -22,7 +22,7 @@ module Mist
         sleep 10
       end
 
-      result
+      raise 'There was an error with elastic beanstalk, please consult the logs.' if result == :failure
     end
 
     def version(name)
