@@ -10,13 +10,19 @@ module Mist
     end
 
     def register_deployment_key
-      key = client.keys.select { |key| key[:title] == DEPLOYMENT_GITHUB_KEY }.first
-
       client.add_key(DEPLOYMENT_GITHUB_KEY, ssh_key.value) unless key
+    end
+
+    def unregister_deployment_key
+      client.remove_key(key[:id]) if key
     end
 
     private
 
     attr_reader :access_token, :email, :client, :ssh_key
+
+    def key
+      @key ||= client.keys.select { |key| key[:title] == DEPLOYMENT_GITHUB_KEY }.first
+    end
   end
 end

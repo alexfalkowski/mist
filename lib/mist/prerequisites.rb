@@ -14,6 +14,11 @@ module Mist
       eb_tool.setup
     end
 
+    def cleanup
+      github.unregister_deployment_key
+      eb_tool.cleanup
+    end
+
     private
 
     attr_reader :access_token, :email, :github, :eb_tool

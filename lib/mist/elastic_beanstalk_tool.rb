@@ -9,6 +9,8 @@ module Mist
     def initialize(options = {})
       @home_path = options.fetch(:home_path) { Dir.home }
       @file = options.fetch(:file, File)
+      @file_utils = options.fetch(:file_utils, FileUtils)
+      @dir = options.fetch(:dir, Dir)
       @system_command = options.fetch(:system_command) { SystemCommand.new }
       @logger = options.fetch(:logger, Mist.logger)
     end
@@ -17,6 +19,15 @@ module Mist
       unless file.exists?(tool_path)
         download_tool
         unzip_tool
+
+        logger.info("Successfully setup tool '#{CLI_VERSION}'")
+      end
+    end
+
+    def cleanup
+      if dir.exists?(tool_path)
+        file_utils.rm_rf dir.glob("#{tool_path}*")
+        logger.info("Successfully cleaned up tool '#{CLI_VERSION}'")
       end
     end
 
@@ -30,7 +41,7 @@ module Mist
 
     private
 
-    attr_reader :home_path, :file, :system_command, :logger
+    attr_reader :home_path, :file, :file_utils, :dir, :system_command, :logger
 
     def download_tool
       system_command.run_command('curl', '-s', "-o #{tool_file_path}", URI.join(ELB_URI, FILE_NAME).to_s)
