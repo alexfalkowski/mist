@@ -37,7 +37,23 @@ For the deployment tool to work you will need to add some keys to your environme
 
 > export AWS_DNS_SECRET_KEY=VALUE
 
+> export NEWRELIC_API_KEY=NEWRELIC_API_KEY
+
+> export GITHUB_ACCESS_TOKEN=GITHUB_ACCESS_TOKEN
+
 Please consult [AWS IAM](http://aws.amazon.com/iam/) for those values.
+
+### Setup & Cleanup
+
+It is important to make sure the tool is easy to use.
+
+To get going
+
+> ./mist setup --email your_email
+
+Once you have had enough
+
+> ./mist cleanup
 
 ### Deploy a stack
 
