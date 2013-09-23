@@ -70,10 +70,25 @@ module Mist
       deployment.mark_stack_version
     end
 
+    desc 'setup', 'Setup the mist.'
+    method_option :email, desc: 'Your email address.', required: true
+    def setup
+      prerequisites(options.email).setup
+    end
+
+    desc 'cleanup', 'Cleanup the mist.'
+    def cleanup
+      prerequisites.cleanup
+    end
+
     private
 
     def deployment(stack)
-      @deployment ||= Mist::Deployment.new({stack: stack})
+      @deployment ||= Mist::Deployment.new(stack: stack)
+    end
+
+    def prerequisites(email = nil)
+      @prerequisites ||= Mist::Prerequisites.new(email: email)
     end
   end
 end

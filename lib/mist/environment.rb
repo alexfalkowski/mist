@@ -11,11 +11,11 @@ module Mist
     NEWRELIC_API_KEY = 'NEWRELIC_API_KEY'
 
     def initialize(name)
-      raise error_message(AWS_APP_ACCESS_KEY_ID) unless app_access_key_id
-      raise error_message(AWS_APP_SECRET_KEY) unless app_secret_key
-      raise error_message(AWS_DNS_ACCESS_KEY_ID) unless dns_access_key_id
-      raise error_message(AWS_DNS_SECRET_KEY) unless dns_secret_key
-      raise error_message(NEWRELIC_API_KEY) unless newrelic_api_key
+      @app_access_key_id = Mist::EnvironmentVariable.new(AWS_APP_ACCESS_KEY_ID).value
+      @app_secret_key = Mist::EnvironmentVariable.new(AWS_APP_SECRET_KEY).value
+      @dns_access_key_id = Mist::EnvironmentVariable.new(AWS_DNS_ACCESS_KEY_ID).value
+      @dns_secret_key = Mist::EnvironmentVariable.new(AWS_DNS_SECRET_KEY).value
+      @newrelic_api_key = Mist::EnvironmentVariable.new(NEWRELIC_API_KEY).value
 
       include_environment_information name
     end
@@ -76,35 +76,13 @@ module Mist
 
     private
 
+    attr_reader :app_access_key_id, :app_secret_key, :dns_access_key_id, :dns_secret_key, :newrelic_api_key
+
     def include_environment_information(name)
       #noinspection RubyResolve
       require "mist/environment/#{name.downcase}"
       #noinspection RubyResolve
       extend Mist::Environment.const_get(name.upcase.to_sym)
-    end
-
-    def error_message(variable)
-      "Please specify the environment variable #{variable}"
-    end
-
-    def app_access_key_id
-      ENV[AWS_APP_ACCESS_KEY_ID]
-    end
-
-    def app_secret_key
-      ENV[AWS_APP_SECRET_KEY]
-    end
-
-    def dns_access_key_id
-      ENV[AWS_DNS_ACCESS_KEY_ID]
-    end
-
-    def dns_secret_key
-      ENV[AWS_DNS_SECRET_KEY]
-    end
-
-    def newrelic_api_key
-      ENV[NEWRELIC_API_KEY]
     end
   end
 end

@@ -2,8 +2,10 @@ module Mist
   class ElasticBeanstalk
     def initialize(options = {})
       @environment = options[:environment]
-      @beanstalk = options.fetch(:beanstalk, AWS::ElasticBeanstalk.new(access_key_id: environment.eb_config[:access_key_id],
-                                                                       secret_access_key: environment.eb_config[:secret_key]))
+      @beanstalk = options.fetch(:beanstalk) {
+        AWS::ElasticBeanstalk.new(access_key_id: environment.eb_config[:access_key_id],
+                                  secret_access_key: environment.eb_config[:secret_key])
+      }
       @logger = options.fetch(:logger, Mist.logger)
     end
 
@@ -20,7 +22,7 @@ module Mist
         sleep 10
       end
 
-      result
+      raise 'There was an error with elastic beanstalk, please consult the logs.' if result == :failure
     end
 
     def version(name)

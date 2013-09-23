@@ -2,10 +2,10 @@ module Mist
   class VersionControl
     def initialize(options = {})
       @environment = options[:environment]
-      @home_path = options.fetch(:home_path, Dir.home)
-      @system_command = options.fetch(:system_command, SystemCommand.new)
+      @home_path = options.fetch(:home_path) { Dir.home }
+      @system_command = options.fetch(:system_command) { SystemCommand.new }
       @logger = options.fetch(:logger, Mist.logger)
-      @cli_location = options.fetch(:cli_location, ENV['CLI_LOCATION'])
+      @eb_tool = options.fetch(:eb_tool) { Mist::ElasticBeanstalkTool.new }
 
       prepare
     end
@@ -17,7 +17,7 @@ module Mist
 
     private
 
-    attr_reader :environment, :home_path, :system_command, :logger, :cli_location
+    attr_reader :environment, :home_path, :system_command, :logger, :eb_tool
 
     def prepare
       clone_repository unless Dir.exists?(repository_path)
@@ -104,7 +104,7 @@ module Mist
     end
 
     def aws_dev_tools_script_path
-      @aws_dev_tools_script_path ||= File.join(cli_location,
+      @aws_dev_tools_script_path ||= File.join(eb_tool.tool_path,
                                                aws_dev_tools_dir_name,
                                                'Linux',
                                                'AWSDevTools-RepositorySetup.sh')
