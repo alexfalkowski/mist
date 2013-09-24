@@ -21,6 +21,7 @@ module Mist
                                                              '--output /dev/null',
                                                              "'#{uri}'")
 
+        redo if status_code == '000'
         raise "Could not warm up website on URL '#{uri}' as we got a status code of '#{status_code}'" unless status_code == '200'
       }
 

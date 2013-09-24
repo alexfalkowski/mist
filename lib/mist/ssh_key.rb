@@ -9,7 +9,7 @@ module Mist
 
     def value
       generate_key unless file.exists?(ssh_public_key_path)
-      file.read(ssh_public_key_path)
+      @value ||= file.read(ssh_public_key_path)
     end
 
     private
