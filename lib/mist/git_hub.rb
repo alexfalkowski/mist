@@ -32,7 +32,7 @@ module Mist
     end
 
     def find_key_by_value(value)
-      @key_by_title ||= client.keys.select { |key| key[:key] == value }.first
+      @key_by_value ||= client.keys.select { |key| key[:key] == value }.first
     end
   end
 end
