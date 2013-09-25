@@ -52,6 +52,10 @@ module Mist
       newrelic.mark_deployment stack_version
     end
 
+    def mark_environment_version(name)
+      newrelic.mark_deployment environment_version(name)
+    end
+
     private
 
     attr_reader :environment, :version_control, :eb, :dns, :logger, :newrelic

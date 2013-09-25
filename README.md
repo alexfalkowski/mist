@@ -67,17 +67,24 @@ This allows the release manager to deploy to a specific environment.
 
 > ./mist deploy -s QA -e PINCHme-US-QA-A
 
+### Warm an environment
+
+This allows the release manager to warm a specific environment.
+
+> ./mist warm -s QA -e PINCHme-US-QA-A
+
 ### Swap an environment
 
 This allows the release manager to swap the DNS endpoint within a stack to point to the next environment.
 
 > ./mist swap -s QA
 
-### Warm an environment
+### Marking Deployment
 
-This allows the release manager to warm a specific environment.
+At PINCHme we use an awesome tool called [newrelic](http://newrelic.com/). When a deployment is finished we mark a
+deployment with newrelic. If you want as a release manager you can do that yourself.
 
-> ./mist warm -s QA -e PINCHme-US-QA-A
+> ./mist mark -s QA
 
 ### Version
 
@@ -87,9 +94,31 @@ This allows the release manager to get an idea of what version is running in a s
 
 > ./mist version -s QA -e PINCHme-US-QA-A
 
-### Marking Deployment
+## FAQ
 
-At PINCHme we use an awesome tool called [newrelic](http://newrelic.com/). When a deployment is finished we mark a
-deployment with newrelic. If you want as a release manager you can do that yourself.
+From time to time the tool will faq up. That is why we have this section.
 
-> ./mist mark
+### Order of events
+
+When running the command
+
+> ./mist deploy -s QA
+
+Mist performs the following actions
+
+* [Deploy an environment](#deploy-an-environment)
+* [Warm an environment](#warm-an-environment)
+* [Swap an environment](#swap-an-environment)
+* [Marking Deployment](#marking-deployment)
+
+If any of these steps fail. You can manually intervene and do the steps individually.
+
+**NOTE: WHEN MANUALLY INTERVENING YOU WILL HAVE TO PASS THE -e (environment) PARAMETER FOR THE NEW ENVIRONMENT YOU ARE DEPLOYING TO!**
+
+### Common Errors
+
+Below is a list of common errors.
+
+#### Could not warm up website
+
+When this error happens all you need to do is run [Warm an environment](#warm-an-environment) and follow the other steps
