@@ -93,3 +93,32 @@ This allows the release manager to get an idea of what version is running in a s
 > ./mist version -s QA
 
 > ./mist version -s QA -e PINCHme-US-QA-A
+
+## FAQ
+
+From time to time the tool will faq up. That is why we have this section.
+
+### Order of events
+
+When running the command
+
+> ./mist deploy -s QA
+
+Mist performs the following actions
+
+* [Deploy an environment](#deploy-an-environment)
+* [Warm an environment](#warm-an-environment)
+* [Swap an environment](#swap-an-environment)
+* [Marking Deployment](#marking-deployment)
+
+If any of these steps fail. You can manually intervene and do the steps individually.
+
+**NOTE: WHEN MANUALLY INTERVENING YOU WILL HAVE TO PASS THE -e (environment) PARAMETER FOR THE NEW ENVIRONMENT YOU ARE DEPLOYING TO!**
+
+### Common Errors
+
+Below is a list of common errors.
+
+#### Could not warm up website
+
+When this error happens all you need to do is run [Warm an environment](#warm-an-environment) and follow the other steps
