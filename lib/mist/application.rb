@@ -9,10 +9,6 @@ module Mist
         'Deploy a stack, e.g QA|UAT|LIVE'
       end
 
-      def stack_default
-        'QA'
-      end
-
       def environment_message
         'Deploy an environment, e.g PINCHme-US-QA-A|PINCHme-US-QA-B'
       end
@@ -23,7 +19,7 @@ module Mist
     end
 
     desc 'deploy', 'Deploy a specific stack or an environment within a stack.'
-    method_option :stack, aliases: stack_alias, desc: stack_message, default: stack_default
+    method_option :stack, aliases: stack_alias, desc: stack_message, required: true
     method_option :environment, aliases: environment_alias, desc: environment_message
     def deploy
       deployment = deployment(options.stack)
@@ -36,14 +32,14 @@ module Mist
     end
 
     desc 'swap', 'Swaps the DNS endpoint.'
-    method_option :stack, aliases: stack_alias, desc: stack_message, default: stack_default
+    method_option :stack, aliases: stack_alias, desc: stack_message, required: true
     def swap
       deployment = deployment(options.stack)
       deployment.update_endpoint
     end
 
     desc 'warm', 'Warms a specific environment.'
-    method_option :stack, aliases: stack_alias, desc: stack_message, default: stack_default
+    method_option :stack, aliases: stack_alias, desc: stack_message, required: true
     method_option :environment, aliases: environment_alias, desc: environment_message, required: true
     def warm
       deployment = deployment(options.stack)
@@ -51,7 +47,7 @@ module Mist
     end
 
     desc 'version', 'The version of specific stack or an environment within a stack.'
-    method_option :stack, aliases: stack_alias, desc: stack_message, default: stack_default
+    method_option :stack, aliases: stack_alias, desc: stack_message, required: true
     method_option :environment, aliases: environment_alias, desc: environment_message
     def version
       deployment = deployment(options.stack)
@@ -64,7 +60,7 @@ module Mist
     end
 
     desc 'mark', 'Mark a version with newrelic of a specific stack.'
-    method_option :stack, aliases: stack_alias, desc: stack_message, default: stack_default
+    method_option :stack, aliases: stack_alias, desc: stack_message, required: true
     def mark
       deployment = deployment(options.stack)
       deployment.mark_stack_version
