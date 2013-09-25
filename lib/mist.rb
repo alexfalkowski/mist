@@ -7,6 +7,7 @@ require 'new_relic_api'
 require 'octokit'
 
 require 'mist/version_control'
+require 'mist/version_control_extensions'
 require 'mist/environment'
 require 'mist/environment_variable'
 require 'mist/elastic_beanstalk'
