@@ -59,11 +59,17 @@ module Mist
       end
     end
 
-    desc 'mark', 'Mark a version with newrelic of a specific stack.'
+    desc 'mark', 'Mark a version with newrelic of a specific stack or an environment within a stack.'
     method_option :stack, aliases: stack_alias, desc: stack_message, required: true
+    method_option :environment, aliases: environment_alias, desc: environment_message
     def mark
       deployment = deployment(options.stack)
-      deployment.mark_stack_version
+
+      if options.environment?
+        deployment.mark_environment_version options.environment
+      else
+        deployment.mark_stack_version
+      end
     end
 
     desc 'setup', 'Setup the mist.'
