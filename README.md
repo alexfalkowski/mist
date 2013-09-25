@@ -67,17 +67,24 @@ This allows the release manager to deploy to a specific environment.
 
 > ./mist deploy -s QA -e PINCHme-US-QA-A
 
+### Warm an environment
+
+This allows the release manager to warm a specific environment.
+
+> ./mist warm -s QA -e PINCHme-US-QA-A
+
 ### Swap an environment
 
 This allows the release manager to swap the DNS endpoint within a stack to point to the next environment.
 
 > ./mist swap -s QA
 
-### Warm an environment
+### Marking Deployment
 
-This allows the release manager to warm a specific environment.
+At PINCHme we use an awesome tool called [newrelic](http://newrelic.com/). When a deployment is finished we mark a
+deployment with newrelic. If you want as a release manager you can do that yourself.
 
-> ./mist warm -s QA -e PINCHme-US-QA-A
+> ./mist mark -s QA
 
 ### Version
 
@@ -86,10 +93,3 @@ This allows the release manager to get an idea of what version is running in a s
 > ./mist version -s QA
 
 > ./mist version -s QA -e PINCHme-US-QA-A
-
-### Marking Deployment
-
-At PINCHme we use an awesome tool called [newrelic](http://newrelic.com/). When a deployment is finished we mark a
-deployment with newrelic. If you want as a release manager you can do that yourself.
-
-> ./mist mark
