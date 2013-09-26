@@ -22,32 +22,32 @@ module Mist
 
     def variables
       @variables ||= {
-          git: {
-              repository_name: 'PINCHme',
-              repository_uri: 'git@github.com:mojotech/PinchMe.git',
-              local_path: '/tmp'
+        git: {
+          repository_name: 'PINCHme',
+          repository_uri: 'git@github.com:mojotech/PinchMe.git',
+          local_path: '/tmp'
+        },
+        aws: {
+          eb: {
+            access_key_id: app_access_key_id,
+            secret_key: app_secret_key,
+            application_name: 'PINCHme-US',
+            dev_tools_endpoint: 'git.elasticbeanstalk.us-east-1.amazonaws.com',
+            environments: environments,
+            region: 'us-east-1'
           },
-          aws: {
-              eb: {
-                  access_key_id: app_access_key_id,
-                  secret_key: app_secret_key,
-                  application_name: 'PINCHme-US',
-                  dev_tools_endpoint: 'git.elasticbeanstalk.us-east-1.amazonaws.com',
-                  environments: environments,
-                  region: 'us-east-1'
-              },
-              dns: {
-                  hosted_zone: 'pinchme.com.',
-                  domain: domain,
-                  endpoint: endpoint,
-                  access_key_id: dns_access_key_id,
-                  secret_key: dns_secret_key,
-              }
-          },
-          newrelic: {
-              api_key: newrelic_api_key,
-              application_name: application_name
+          dns: {
+            hosted_zone: 'pinchme.com.',
+            domain: domain,
+            endpoint: endpoint,
+            access_key_id: dns_access_key_id,
+            secret_key: dns_secret_key,
           }
+        },
+        newrelic: {
+          api_key: newrelic_api_key,
+          application_name: application_name
+        }
       }
     end
 
