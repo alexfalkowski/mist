@@ -21,7 +21,7 @@ module Mist
                                                              '--output /dev/null',
                                                              "'#{uri}'")
 
-        redo if status_code == '000'
+        redo if timeout?(status_code)
         raise "Could not warm up website on URL '#{uri}' as we got a status code of '#{status_code}'" unless status_code == '200'
       }
 
@@ -43,6 +43,10 @@ module Mist
     private
 
     attr_reader :uri, :system_command, :logger
+
+    def timeout?(status_code)
+      status_code == '000' || status_code == '408' || status_code == '504'
+    end
 
     def headers
       system_command.run_command_with_output('curl', '--connect-timeout 300', '--silent', "-I '#{uri}'")
