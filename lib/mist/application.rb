@@ -89,6 +89,32 @@ module Mist
       prerequisites.cleanup
     end
 
+    desc 'stop', 'Stop a specific stack or an environment within a stack.'
+    method_option :stack, aliases: stack_alias, desc: stack_message, required: true
+    method_option :environment, aliases: environment_alias, desc: environment_message
+    def stop
+      deployment = deployment(options.stack)
+
+      if options.environment?
+        deployment.stop_environment options.environment
+      else
+        deployment.stop_stack
+      end
+    end
+
+    desc 'start', 'Start a specific stack or an environment within a stack.'
+    method_option :stack, aliases: stack_alias, desc: stack_message, required: true
+    method_option :environment, aliases: environment_alias, desc: environment_message
+    def start
+      deployment = deployment(options.stack)
+
+      if options.environment?
+        deployment.start_environment options.environment
+      else
+        deployment.start_stack
+      end
+    end
+
     private
 
     def deployment(stack)

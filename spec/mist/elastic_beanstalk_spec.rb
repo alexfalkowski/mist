@@ -7,9 +7,9 @@ describe Mist::ElasticBeanstalk do
     context 'failure event' do
       Given(:aws_eb_client) { double('AWS::Client',
                                      describe_events: {
-                                         events: [
-                                             {severity: 'ERROR', message: 'Failed to deploy application.'}
-                                         ]
+                                       events: [
+                                         {severity: 'ERROR', message: 'Failed to deploy application.'}
+                                       ]
                                      })
       }
       Given(:aws_eb) { double('AWS::ElasticBeanstalk', client: aws_eb_client) }
@@ -23,9 +23,9 @@ describe Mist::ElasticBeanstalk do
     context 'success event' do
       Given(:aws_eb_client) { double('AWS::Client',
                                      describe_events: {
-                                         events: [
-                                             {severity: 'INFO', message: 'Environment update completed successfully.'}
-                                         ]
+                                       events: [
+                                         {severity: 'INFO', message: 'Environment update completed successfully.'}
+                                       ]
                                      })
       }
       Given(:aws_eb) { double('AWS::ElasticBeanstalk', client: aws_eb_client) }
@@ -49,5 +49,55 @@ describe Mist::ElasticBeanstalk do
                                                                           environment_names: %w(test))
     }
     Then { result == '1.1' }
+  end
+
+  context 'Start' do
+    Given(:aws_eb_client) {
+      double('AWS::Client',
+             describe_environment_resources: {
+               environment_resources: {
+                 auto_scaling_groups: [
+                   {name: 'group-name'}
+                 ]
+               }
+             })
+    }
+    Given(:aws_eb) { double('AWS::ElasticBeanstalk', client: aws_eb_client) }
+    Given(:aws_asg) { double('AWS::AutoScaling::Group', update: nil) }
+    Given(:aws_groups) { double('AWS::AutoScaling::GroupCollection') }
+    Given { allow(aws_groups).to receive(:[]).with('group-name') { aws_asg } }
+    Given(:aws_as) { double('AWS::AutoScaling', groups: aws_groups) }
+    Given(:eb) {
+      Mist::ElasticBeanstalk.new(environment: environment, beanstalk: aws_eb, asg: aws_as)
+    }
+    When(:result) { eb.start('test') }
+    Then {
+      expect(aws_asg).to have_received(:update).with(min_size: 1, max_size: 4, desired_capacity: 1)
+    }
+  end
+
+  context 'Stop' do
+    Given(:aws_eb_client) {
+      double('AWS::Client',
+             describe_environment_resources: {
+               environment_resources: {
+                 auto_scaling_groups: [
+                   {name: 'group-name'}
+                 ]
+               }
+             })
+    }
+    Given(:aws_eb) { double('AWS::ElasticBeanstalk', client: aws_eb_client) }
+    Given(:aws_asg) { double('AWS::AutoScaling::Group', update: nil) }
+    Given(:aws_groups) { double('AWS::AutoScaling::GroupCollection') }
+    Given { allow(aws_groups).to receive(:[]).with('group-name') { aws_asg } }
+    Given(:aws_as) { double('AWS::AutoScaling', groups: aws_groups) }
+    Given(:eb) {
+      Mist::ElasticBeanstalk.new(environment: environment, beanstalk: aws_eb, asg: aws_as)
+    }
+    When(:result) { eb.stop('test') }
+    Then {
+      expect(aws_asg).to have_received(:update).with(min_size: 0, max_size: 0)
+    }
   end
 end

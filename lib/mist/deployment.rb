@@ -62,6 +62,28 @@ module Mist
       newrelic.mark_deployment environment_version(name)
     end
 
+    def start_stack
+      environment.eb_config[:environments].each { |e|
+        start_environment e[:name]
+      }
+    end
+
+    def start_environment(name)
+      current_environment = find_environment(name)
+      eb.start current_environment[:name]
+    end
+
+    def stop_stack
+      environment.eb_config[:environments].each { |e|
+        stop_environment e[:name]
+      }
+    end
+
+    def stop_environment(name)
+      current_environment = find_environment(name)
+      eb.stop current_environment[:name]
+    end
+
     private
 
     attr_reader :environment, :version_control, :eb, :dns, :logger, :newrelic
