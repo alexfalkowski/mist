@@ -67,7 +67,7 @@ module Mist
     attr_reader :environment, :version_control, :eb, :dns, :logger, :newrelic
 
     def current_environment_name
-      @current_environment_name ||= website(environment.dns_config[:domain]).current_environment
+      @current_environment_name ||= website(environment.dns_config[:endpoint]).current_environment
     end
 
     def deploy(name, uri)

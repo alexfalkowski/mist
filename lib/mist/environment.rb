@@ -39,6 +39,7 @@ module Mist
               dns: {
                   hosted_zone: 'pinchme.com.',
                   domain: domain,
+                  endpoint: endpoint,
                   access_key_id: dns_access_key_id,
                   secret_key: dns_secret_key,
               }

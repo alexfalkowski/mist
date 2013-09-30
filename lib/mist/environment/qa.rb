@@ -16,6 +16,10 @@ module Mist::Environment::QA
     'qa.pinchme.com.'
   end
 
+  def endpoint
+    'https://qa.pinchme.com'
+  end
+
   def application_name
     'PINCHme-US-QA'
   end

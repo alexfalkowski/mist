@@ -16,6 +16,10 @@ module Mist::Environment::UAT
     'uat.pinchme.com.'
   end
 
+  def endpoint
+    'https://uat.pinchme.com'
+  end
+
   def application_name
     'PINCHme-US-UAT'
   end
