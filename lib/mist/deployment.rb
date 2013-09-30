@@ -28,10 +28,16 @@ module Mist
       log_success(name, current_environment_uri)
     end
 
-    def update_endpoint
+    def update_stack_endpoint
       next_environment = environment.find_next_environment(current_environment_name)
 
       dns.update_endpoint next_environment[:name]
+    end
+
+    def update_environment_endpoint(name)
+      current_environment = find_environment(name)
+
+      dns.update_endpoint current_environment[:name]
     end
 
     def warm_environment(name)
@@ -61,7 +67,7 @@ module Mist
     attr_reader :environment, :version_control, :eb, :dns, :logger, :newrelic
 
     def current_environment_name
-      @current_environment_name ||= website(environment.dns_config[:domain]).current_environment
+      @current_environment_name ||= website(environment.dns_config[:endpoint]).current_environment
     end
 
     def deploy(name, uri)

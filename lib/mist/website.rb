@@ -14,7 +14,7 @@ module Mist
       (1..20).each {
         status_code = system_command.run_command_with_output('curl',
                                                              '--connect-timeout 300',
-                                                             '--digest',
+                                                             '--insecure',
                                                              "-u 'pinchmebeta:pinchmenyc'",
                                                              "--write-out '%{http_code}'",
                                                              '--silent',
@@ -49,7 +49,12 @@ module Mist
     end
 
     def headers
-      system_command.run_command_with_output('curl', '--connect-timeout 300', '--silent', "-I '#{uri}'")
+      system_command.run_command_with_output('curl',
+                                             '--connect-timeout 300',
+                                             '--insecure',
+                                             "-u 'pinchmebeta:pinchmenyc'",
+                                             '--silent',
+                                             "-I '#{uri}'")
     end
   end
 end

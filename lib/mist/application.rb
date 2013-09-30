@@ -33,9 +33,15 @@ module Mist
 
     desc 'swap', 'Swaps the DNS endpoint.'
     method_option :stack, aliases: stack_alias, desc: stack_message, required: true
+    method_option :environment, aliases: environment_alias, desc: environment_message, required: true
     def swap
       deployment = deployment(options.stack)
-      deployment.update_endpoint
+
+      if options.environment?
+        deployment.update_environment_endpoint options.environment
+      else
+        deployment.update_stack_endpoint
+      end
     end
 
     desc 'warm', 'Warms a specific environment.'

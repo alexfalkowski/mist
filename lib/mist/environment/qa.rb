@@ -3,17 +3,21 @@ module Mist::Environment::QA
     [
         {
             name: 'PINCHme-US-QA-A',
-            uri: 'http://pinchme-us-qa-a-jn9wvp4tew.elasticbeanstalk.com'
+            uri: 'https://pinchme-us-qa-a-jn9wvp4tew.elasticbeanstalk.com'
         },
         {
             name: 'PINCHme-US-QA-B',
-            uri: 'http://pinchme-us-qa-b-ghruzpydi6.elasticbeanstalk.com'
+            uri: 'https://pinchme-us-qa-b-ghruzpydi6.elasticbeanstalk.com'
         },
     ]
   end
 
   def domain
     'qa.pinchme.com.'
+  end
+
+  def endpoint
+    'https://qa.pinchme.com'
   end
 
   def application_name
