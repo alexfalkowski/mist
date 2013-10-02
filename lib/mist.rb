@@ -19,6 +19,7 @@ require 'mist/git_hub'
 require 'mist/ssh_key'
 require 'mist/elastic_beanstalk_tool'
 require 'mist/prerequisites'
+require 'mist/application_version'
 require 'mist/deployment'
 require 'mist/application'
 
