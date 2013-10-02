@@ -55,17 +55,33 @@ Once you have had enough
 
 > ./mist cleanup
 
-### Deploy a stack
+### Deploy
 
-This allows the release manager to deploy to a specific stack
+There are several ways that the application can be deployed.
+
+#### Deploy a stack
+
+This allows the release manager to deploy to a specific stack.
 
 > ./mist deploy -s QA
 
-### Deploy an environment
+#### Deploy a stack with version
+
+This allows the release manager to deploy to a specific stack with a version.
+
+> ./mist deploy -s QA -v git-24f16d3727b0271c89e213d6ded27f986dfb5436-1380729401417
+
+#### Deploy an environment
 
 This allows the release manager to deploy to a specific environment.
 
 > ./mist deploy -s QA -e PINCHme-US-QA-A
+
+#### Deploy an environment with version
+
+This allows the release manager to deploy to a specific environment with a version.
+
+> ./mist deploy -s QA -e PINCHme-US-QA-A -v git-24f16d3727b0271c89e213d6ded27f986dfb5436-1380729401417
 
 ### Warm an environment
 
