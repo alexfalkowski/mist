@@ -21,13 +21,22 @@ module Mist
     desc 'deploy', 'Deploy a specific stack or an environment within a stack.'
     method_option :stack, aliases: stack_alias, desc: stack_message, required: true
     method_option :environment, aliases: environment_alias, desc: environment_message
+    method_option :version, aliases: '-v', desc: 'Application version to deploy'
     def deploy
       deployment = deployment(options.stack)
 
       if options.environment?
-        deployment.deploy_latest_to_environment options.environment
+        if options.version?
+          deployment.deploy_to_environment options.environment, options.version
+        else
+          deployment.deploy_latest_to_environment options.environment
+        end
       else
-        deployment.deploy_latest_to_stack
+        if options.version?
+          deployment.deploy_to_stack options.version
+        else
+          deployment.deploy_latest_to_stack
+        end
       end
     end
 

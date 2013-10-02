@@ -7,6 +7,7 @@ module Mist
       @dns = options.fetch(:dns, Mist::Dns.new(environment: environment))
       @logger = options.fetch(:logger, Mist.logger)
       @newrelic = options.fetch(:newrelic) { Mist::Newrelic.new(environment: environment) }
+      @application_version = options.fetch(:application_version, Mist::ApplicationVersion)
     end
 
     def deploy_latest_to_stack
@@ -14,7 +15,18 @@ module Mist
       next_environment_name = next_environment[:name]
       next_environment_uri = next_environment[:uri]
 
-      deploy(next_environment_name, next_environment_uri)
+      deploy_latest(next_environment_name, next_environment_uri)
+      dns.update_endpoint next_environment_name
+      newrelic.mark_deployment environment_version(next_environment_name)
+      log_success(next_environment_name, next_environment_uri)
+    end
+
+    def deploy_to_stack(version)
+      next_environment = environment.find_next_environment(current_environment_name)
+      next_environment_name = next_environment[:name]
+      next_environment_uri = next_environment[:uri]
+
+      deploy(next_environment_name, commit(version), next_environment_uri)
       dns.update_endpoint next_environment_name
       newrelic.mark_deployment environment_version(next_environment_name)
       log_success(next_environment_name, next_environment_uri)
@@ -24,7 +36,15 @@ module Mist
       current_environment = find_environment(name)
       current_environment_uri = current_environment[:uri]
 
-      deploy(name, current_environment_uri)
+      deploy_latest(name, current_environment_uri)
+      log_success(name, current_environment_uri)
+    end
+
+    def deploy_to_environment(name, version)
+      current_environment = find_environment(name)
+      current_environment_uri = current_environment[:uri]
+
+      deploy(name, commit(version), current_environment_uri)
       log_success(name, current_environment_uri)
     end
 
@@ -86,14 +106,24 @@ module Mist
 
     private
 
-    attr_reader :environment, :version_control, :eb, :dns, :logger, :newrelic
+    attr_reader :environment, :version_control, :eb, :dns, :logger, :newrelic, :application_version
 
     def current_environment_name
       @current_environment_name ||= website(environment.dns_config[:endpoint]).current_environment
     end
 
-    def deploy(name, uri)
+    def commit(version)
+      application_version.new(version: version).sha
+    end
+
+    def deploy_latest(name, uri)
       version_control.push_latest_version name
+      eb.wait_for_environment name, current_time
+      warm uri
+    end
+
+    def deploy(name, version, uri)
+      version_control.push_version name, version
       eb.wait_for_environment name, current_time
       warm uri
     end
