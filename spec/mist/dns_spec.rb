@@ -4,36 +4,36 @@ describe Mist::Dns do
   let(:environment) { Spec.environment }
   let(:options) {
     {
-        hosted_zone_id: 'id',
-        change_batch: {
-            comment: "Changing host from 'PINCHme-US-QA-A' to 'PINCHme-US-QA-B'",
-            changes: [
-                {
-                    action: 'DELETE',
-                    resource_record_set:
-                        {
-                            name: 'qa.pinchme.com.',
-                            type: 'CNAME',
-                            ttl: 300,
-                            resource_records: [
-                                {value: 'pinchme-us-qa-a-jn9wvp4tew.elasticbeanstalk.com'}
-                            ]
-                        }
-                },
-                {
-                    action: 'CREATE',
-                    resource_record_set:
-                        {
-                            name: 'qa.pinchme.com.',
-                            type: 'CNAME',
-                            ttl: 300,
-                            resource_records: [
-                                {value: 'pinchme-us-qa-b-ghruzpydi6.elasticbeanstalk.com'}
-                            ]
-                        }
-                }
-            ]
-        }
+      hosted_zone_id: 'id',
+      change_batch: {
+        comment: "Changing host from 'PINCHme-US-QA-A' to 'PINCHme-US-QA-B'",
+        changes: [
+          {
+            action: 'DELETE',
+            resource_record_set:
+              {
+                name: 'qa.pinchme.com.',
+                type: 'CNAME',
+                ttl: 300,
+                resource_records: [
+                  {value: 'pinchme-us-qa-a-jn9wvp4tew.elasticbeanstalk.com'}
+                ]
+              }
+          },
+          {
+            action: 'CREATE',
+            resource_record_set:
+              {
+                name: 'qa.pinchme.com.',
+                type: 'CNAME',
+                ttl: 300,
+                resource_records: [
+                  {value: 'pinchme-us-qa-b-ghruzpydi6.elasticbeanstalk.com'}
+                ]
+              }
+          }
+        ]
+      }
     }
   }
 
@@ -41,7 +41,7 @@ describe Mist::Dns do
     Given(:aws_route53_client) {
       double('AWS::Client',
              list_hosted_zones: {hosted_zones: [
-                 {id: 'id', name: 'pinchme.com.'}
+               {id: 'id', name: 'pinchme.com.'}
              ]},
              change_resource_record_sets: nil
       )
