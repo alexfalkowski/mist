@@ -26,7 +26,7 @@ describe Mist::SshKey do
                                                                  "-N ''",
                                                                  '-f path')
     }
-    Then { value == 'test'}
+    Then { value == 'test' }
   end
 
   context 'key generated' do
@@ -47,6 +47,6 @@ describe Mist::SshKey do
       expect(file).to have_received(:read).with('path')
     }
     Then { expect(system_command).to_not have_received(:run_command) }
-    Then { value == 'test'}
+    Then { value == 'test' }
   end
 end

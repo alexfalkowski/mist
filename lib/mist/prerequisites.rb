@@ -1,7 +1,7 @@
 module Mist
-  GITHUB_ACCESS_TOKEN = 'GITHUB_ACCESS_TOKEN'
-
   class Prerequisites
+    GITHUB_ACCESS_TOKEN = 'GITHUB_ACCESS_TOKEN'
+
     def initialize(options = {})
       @access_token = Mist::EnvironmentVariable.new(GITHUB_ACCESS_TOKEN).value
       @email = options[:email]

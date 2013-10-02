@@ -94,6 +94,26 @@ This allows the release manager to get an idea of what version is running in a s
 
 > ./mist version -s QA -e PINCHme-US-QA-A
 
+## Costs
+
+As we all know AWS costs money. For this reason we allow mist to help you manage those costs.
+
+### Start
+
+This allows the release manager or cron job to start the elastic beanstalk environment
+
+> ./mist start -s QA
+
+> ./mist start -s QA -e PINCHme-US-QA-A
+
+### Stop
+
+This allows the release manager or cron job to stop the elastic beanstalk environment
+
+> ./mist stop -s QA
+
+> ./mist stop -s QA -e PINCHme-US-QA-A
+
 ## FAQ
 
 From time to time the tool will faq up. That is why we have this section.

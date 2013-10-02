@@ -6,13 +6,17 @@ module Mist
         AWS::ElasticBeanstalk.new(access_key_id: environment.eb_config[:access_key_id],
                                   secret_access_key: environment.eb_config[:secret_key])
       }
+      @asg = options.fetch(:asg) {
+        AWS::AutoScaling.new(access_key_id: environment.eb_config[:access_key_id],
+                             secret_access_key: environment.eb_config[:secret_key])
+      }
       @logger = options.fetch(:logger, Mist.logger)
     end
 
     def wait_for_environment(name, deploy_date)
       options = {
-          environment_name: name,
-          start_time: deploy_date
+        environment_name: name,
+        start_time: deploy_date
       }
 
       logger.info("Sending elastic beanstalk the following information '#{options}'")
@@ -27,8 +31,8 @@ module Mist
 
     def version(name)
       options = {
-          application_name: environment.eb_config[:application_name],
-          environment_names: [name]
+        application_name: environment.eb_config[:application_name],
+        environment_names: [name]
       }
 
       beanstalk.client.describe_environments(options)[:environments].first[:version_label].tap { |version|
@@ -36,9 +40,44 @@ module Mist
       }
     end
 
+    def start(name)
+      options =  {
+        min_size: 1,
+        max_size: 4,
+        desired_capacity: 1
+      }
+
+      update_auto_scaling_group name, options
+      logger.info("Successfully started environment '#{name}'")
+    end
+
+    def stop(name)
+      options = {
+        min_size: 0,
+        max_size: 0
+      }
+
+      update_auto_scaling_group name, options
+      logger.info("Successfully stopped environment '#{name}'")
+    end
+
     private
 
-    attr_reader :environment, :beanstalk, :logger
+    attr_reader :environment, :beanstalk, :asg, :logger
+
+    def update_auto_scaling_group(name, update_options)
+      options = {
+        environment_name: name,
+      }
+
+      resources = beanstalk.client.describe_environment_resources(options)[:environment_resources]
+      auto_scaling_group = resources[:auto_scaling_groups].first
+
+      if auto_scaling_group
+        group = asg.groups[auto_scaling_group[:name]]
+        group.update(update_options)
+      end
+    end
 
     def validate_events(events)
       errors = events.select { |e| e[:severity] == 'ERROR' }
