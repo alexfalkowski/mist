@@ -6,21 +6,24 @@ module Mist
       @system_command = options.fetch(:system_command) { SystemCommand.new }
       @logger = options.fetch(:logger, Mist.logger)
       @eb_tool = options.fetch(:eb_tool) { Mist::ElasticBeanstalkTool.new }
+      @dir = options.fetch(:dir, Dir)
+      @file = options.fetch(:file, File)
+      @file_utils = options.fetch(:file_utils, FileUtils)
     end
 
     def setup
-      add_deploy_extensions unless Dir.exists?(aws_dev_tools_path)
-      write_eb_config_file unless File.exists?(eb_config_file)
-      write_aws_credential_file unless File.exists?(aws_credential_file)
+      add_deploy_extensions unless dir.exists?(aws_dev_tools_path)
+      write_eb_config_file unless file.exists?(eb_config_file)
+      write_aws_credential_file unless file.exists?(aws_credential_file)
     end
 
     private
 
-    attr_reader :environment, :home_path, :system_command, :logger, :eb_tool
+    attr_reader :environment, :home_path, :system_command, :logger, :eb_tool, :dir, :file, :file_utils
 
     def add_deploy_extensions
       logger.info('Adding AWS deployment tools.')
-      Dir.chdir(repository_path) do
+      dir.chdir(repository_path) do
         system_command.run_command aws_dev_tools_script_path
       end
     end
@@ -47,33 +50,33 @@ module Mist
     end
 
     def write_file(path, contents)
-      dir = File.dirname(path)
-      FileUtils.mkpath dir unless Dir.exists?(dir)
+      dir_name = file.dirname(path)
+      file_utils.mkpath dir_name unless dir.exists?(dir_name)
 
-      File.open(path, 'w+') { |file|
+      file.open(path, 'w+') { |file|
         file.write contents
       }
     end
 
     def repository_path
-      @repository_path ||= File.join(environment.git_config[:local_path],
+      @repository_path ||= file.join(environment.git_config[:local_path],
                                      environment.git_config[:repository_name])
     end
 
     def eb_config_file
-      @eb_config_file ||= File.join(repository_path, elastic_beanstalk_dir_name, 'config')
+      @eb_config_file ||= file.join(repository_path, elastic_beanstalk_dir_name, 'config')
     end
 
     def aws_credential_file
-      @aws_credential_file ||= File.join(home_path, elastic_beanstalk_dir_name, 'aws_credential_file')
+      @aws_credential_file ||= file.join(home_path, elastic_beanstalk_dir_name, 'aws_credential_file')
     end
 
     def aws_dev_tools_path
-      @aws_dev_tools_path ||= File.join(repository_path, '.git', aws_dev_tools_dir_name)
+      @aws_dev_tools_path ||= file.join(repository_path, '.git', aws_dev_tools_dir_name)
     end
 
     def aws_dev_tools_script_path
-      @aws_dev_tools_script_path ||= File.join(eb_tool.tool_path,
+      @aws_dev_tools_script_path ||= file.join(eb_tool.tool_path,
                                                aws_dev_tools_dir_name,
                                                'Linux',
                                                'AWSDevTools-RepositorySetup.sh')
