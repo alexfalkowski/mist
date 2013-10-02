@@ -14,30 +14,30 @@ module Mist
       next_environment = environment.find_environment(environment_name)
 
       options = {
-          hosted_zone_id: zone[:id],
-          change_batch: {
-              comment: "Changing host from '#{current_environment[:name]}' to '#{next_environment[:name]}'",
-              changes: [
-                  {
-                      action: 'DELETE',
-                      resource_record_set: {
-                          name: environment.dns_config[:domain],
-                          type: 'CNAME',
-                          ttl: 300,
-                          resource_records: [{value: strip_protocol(current_environment[:uri])}]
-                      }
-                  },
-                  {
-                      action: 'CREATE',
-                      resource_record_set: {
-                          name: environment.dns_config[:domain],
-                          type: 'CNAME',
-                          ttl: 300,
-                          resource_records: [{value: strip_protocol(next_environment[:uri])}]
-                      }
-                  }
-              ]
-          }
+        hosted_zone_id: zone[:id],
+        change_batch: {
+          comment: "Changing host from '#{current_environment[:name]}' to '#{next_environment[:name]}'",
+          changes: [
+            {
+              action: 'DELETE',
+              resource_record_set: {
+                name: environment.dns_config[:domain],
+                type: 'CNAME',
+                ttl: 300,
+                resource_records: [{value: strip_protocol(current_environment[:uri])}]
+              }
+            },
+            {
+              action: 'CREATE',
+              resource_record_set: {
+                name: environment.dns_config[:domain],
+                type: 'CNAME',
+                ttl: 300,
+                resource_records: [{value: strip_protocol(next_environment[:uri])}]
+              }
+            }
+          ]
+        }
       }
 
       response = dns.client.change_resource_record_sets(options)
