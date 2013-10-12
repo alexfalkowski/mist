@@ -3,6 +3,7 @@ module Mist
     ENVIRONMENT_NAME_HEADER = 'X-Environment-Name'
 
     def initialize(options = {})
+      @environment = options[:environment]
       @uri = URI.parse(options[:uri])
       @system_command = options.fetch(:system_command) { SystemCommand.new }
       @logger = options.fetch(:logger, Mist.logger)
@@ -15,7 +16,7 @@ module Mist
         status_code = system_command.run_command_with_output('curl',
                                                              '--connect-timeout 300',
                                                              '--insecure',
-                                                             "-u 'pinchmebeta:pinchmenyc'",
+                                                             credentials_parameter,
                                                              "--write-out '%{http_code}'",
                                                              '--silent',
                                                              '--output /dev/null',
@@ -42,7 +43,7 @@ module Mist
 
     private
 
-    attr_reader :uri, :system_command, :logger
+    attr_reader :environment, :uri, :system_command, :logger
 
     def timeout?(status_code)
       status_code == '000' || status_code == '408' || status_code == '504'
@@ -52,9 +53,18 @@ module Mist
       system_command.run_command_with_output('curl',
                                              '--connect-timeout 300',
                                              '--insecure',
-                                             "-u 'pinchmebeta:pinchmenyc'",
+                                             credentials_parameter,
                                              '--silent',
                                              "-I '#{uri}'")
+    end
+
+    def credentials_parameter
+      basic_auth = environment.basic_auth_config
+      if basic_auth
+        "-u '#{basic_auth[:username]}:#{basic_auth[:password]}'"
+      else
+        ''
+      end
     end
   end
 end

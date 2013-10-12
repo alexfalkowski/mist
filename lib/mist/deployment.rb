@@ -1,7 +1,7 @@
 module Mist
   class Deployment
     def initialize(options = {})
-      @environment = options.fetch(:environment) { Mist::Environment.new(options[:stack]) }
+      @environment = options.fetch(:environment) { Mist::Environment.new(name: options[:stack]) }
       @version_control = options.fetch(:version_control) { Mist::VersionControl.new(environment: environment) }
       @eb = options.fetch(:eb) { Mist::ElasticBeanstalk.new(environment: environment) }
       @dns = options.fetch(:dns, Mist::Dns.new(environment: environment))
@@ -147,7 +147,7 @@ module Mist
     end
 
     def website(uri)
-      Mist::Website.new(uri: uri)
+      Mist::Website.new(environment: environment, uri: uri)
     end
   end
 end

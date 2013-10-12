@@ -17,8 +17,8 @@ describe Mist::Newrelic do
     Then {
       expect(newrelic_deployment).to have_received(:create).with(
                                        {
-                                         app_name: 'PINCHme-US-QA',
-                                         description: "Updating application 'PINCHme-US-QA' with version '1.0'",
+                                         app_name: 'test-QA',
+                                         description: "Updating application 'test-QA' with version '1.0'",
                                          user: 'username',
                                          revision: '1.0'
                                        })

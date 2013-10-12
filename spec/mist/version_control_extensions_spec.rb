@@ -37,9 +37,9 @@ describe Mist::VersionControlExtensions do
     }
     When { extensions.setup }
     Then { File.exists?(eb_config_file) }
-    Then { File.read(eb_config_file).include? 'ApplicationName=PINCHme-US' }
+    Then { File.read(eb_config_file).include? 'ApplicationName=test' }
     Then { File.read(eb_config_file).include? 'DevToolsEndpoint=git.elasticbeanstalk.us-east-1.amazonaws.com' }
-    Then { File.read(eb_config_file).include? 'EnvironmentName=PINCHme-US-QA-A' }
+    Then { File.read(eb_config_file).include? 'EnvironmentName=test-QA-A' }
     Then { File.read(eb_config_file).include? 'Region=us-east-1' }
   end
 

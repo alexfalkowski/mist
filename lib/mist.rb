@@ -1,6 +1,7 @@
 require 'time'
 require 'fileutils'
 require 'etc'
+require 'yaml'
 require 'aws-sdk'
 require 'thor'
 require 'new_relic_api'
