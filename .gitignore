@@ -22,3 +22,6 @@ doc/
 
 # AWS
 AWS*
+
+# Config
+config.yml
