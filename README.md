@@ -33,17 +33,12 @@ The deployment tool requires some love before you use it.
 
 For the deployment tool to work you will need to add some keys to your environment.
 
-> export AWS_APP_ACCESS_KEY_ID=VALUE
-
-> export AWS_APP_SECRET_KEY=VALUE
-
-> export AWS_DNS_ACCESS_KEY_ID=VALUE
-
-> export AWS_DNS_SECRET_KEY=VALUE
-
-> export NEWRELIC_API_KEY=NEWRELIC_API_KEY
-
-> export GITHUB_ACCESS_TOKEN=GITHUB_ACCESS_TOKEN
+    export AWS_APP_ACCESS_KEY_ID=VALUE
+    export AWS_APP_SECRET_KEY=VALUE
+    export AWS_DNS_ACCESS_KEY_ID=VALUE
+    export AWS_DNS_SECRET_KEY=VALUE
+    export NEWRELIC_API_KEY=NEWRELIC_API_KEY
+    export GITHUB_ACCESS_TOKEN=GITHUB_ACCESS_TOKEN
 
 Please consult [AWS IAM](http://aws.amazon.com/iam/) for those values.
 
@@ -107,11 +102,11 @@ It is important to make sure the tool is easy to use.
 
 To get going
 
-> ./mist setup --email your_email
+    ./mist setup --email your_email
 
 Once you have had enough
 
-> ./mist cleanup
+    ./mist cleanup
 
 ### Deploy
 
@@ -121,52 +116,52 @@ There are several ways that the application can be deployed.
 
 This allows the release manager to deploy to a specific stack.
 
-> ./mist deploy -s QA
+    ./mist deploy -s QA
 
 #### Deploy a stack with version
 
 This allows the release manager to deploy to a specific stack with a version.
 
-> ./mist deploy -s QA -v git-24f16d3727b0271c89e213d6ded27f986dfb5436-1380729401417
+    ./mist deploy -s QA -v git-24f16d3727b0271c89e213d6ded27f986dfb5436-1380729401417
 
 #### Deploy an environment
 
 This allows the release manager to deploy to a specific environment.
 
-> ./mist deploy -s QA -e PINCHme-US-QA-A
+    ./mist deploy -s QA -e PINCHme-US-QA-A
 
 #### Deploy an environment with version
 
 This allows the release manager to deploy to a specific environment with a version.
 
-> ./mist deploy -s QA -e PINCHme-US-QA-A -v git-24f16d3727b0271c89e213d6ded27f986dfb5436-1380729401417
+    ./mist deploy -s QA -e PINCHme-US-QA-A -v git-24f16d3727b0271c89e213d6ded27f986dfb5436-1380729401417
 
 ### Warm an environment
 
 This allows the release manager to warm a specific environment.
 
-> ./mist warm -s QA -e PINCHme-US-QA-A
+    ./mist warm -s QA -e PINCHme-US-QA-A
 
 ### Swap an environment
 
 This allows the release manager to swap the DNS endpoint within a stack to point to the next environment.
 
-> ./mist swap -s QA
+    ./mist swap -s QA
 
 ### Marking Deployment
 
 At PINCHme we use an awesome tool called [newrelic](http://newrelic.com/). When a deployment is finished we mark a
 deployment with newrelic. If you want as a release manager you can do that yourself.
 
-> ./mist mark -s QA
+    ./mist mark -s QA
 
 ### Version
 
 This allows the release manager to get an idea of what version is running in a stack or an environment within a stack.
 
-> ./mist version -s QA
+    ./mist version -s QA
 
-> ./mist version -s QA -e PINCHme-US-QA-A
+    ./mist version -s QA -e PINCHme-US-QA-A
 
 ## Costs
 
@@ -176,17 +171,17 @@ As we all know AWS costs money. For this reason we allow mist to help you manage
 
 This allows the release manager or cron job to start the elastic beanstalk environment
 
-> ./mist start -s QA
+    ./mist start -s QA
 
-> ./mist start -s QA -e PINCHme-US-QA-A
+    ./mist start -s QA -e PINCHme-US-QA-A
 
 ### Stop
 
 This allows the release manager or cron job to stop the elastic beanstalk environment
 
-> ./mist stop -s QA
+    ./mist stop -s QA
 
-> ./mist stop -s QA -e PINCHme-US-QA-A
+    ./mist stop -s QA -e PINCHme-US-QA-A
 
 ## FAQ
 
@@ -196,7 +191,7 @@ From time to time the tool will faq up. That is why we have this section.
 
 When running the command
 
-> ./mist deploy -s QA
+    ./mist deploy -s QA
 
 Mist performs the following actions
 
