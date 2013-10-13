@@ -1,10 +1,10 @@
 #mist
 
-Cloud automation for PINCHme
+Cloud automation for [AWS Elastic Beanstalk](http://aws.amazon.com/elasticbeanstalk/)
 
 ## Purpose
 
-At PINCHme we believe that computers are better at doing repetitive tasks than humans are. So we want to automate as
+We believe that computers are better at doing repetitive tasks than humans are. So we want to automate as
 much as possible
 
 ## Environment
@@ -128,19 +128,19 @@ This allows the release manager to deploy to a specific stack with a version.
 
 This allows the release manager to deploy to a specific environment.
 
-    ./mist deploy -s QA -e PINCHme-US-QA-A
+    ./mist deploy -s QA -e test-QA-A
 
 #### Deploy an environment with version
 
 This allows the release manager to deploy to a specific environment with a version.
 
-    ./mist deploy -s QA -e PINCHme-US-QA-A -v git-24f16d3727b0271c89e213d6ded27f986dfb5436-1380729401417
+    ./mist deploy -s QA -e test-QA-A -v git-24f16d3727b0271c89e213d6ded27f986dfb5436-1380729401417
 
 ### Warm an environment
 
 This allows the release manager to warm a specific environment.
 
-    ./mist warm -s QA -e PINCHme-US-QA-A
+    ./mist warm -s QA -e test-QA-A
 
 ### Swap an environment
 
@@ -150,7 +150,7 @@ This allows the release manager to swap the DNS endpoint within a stack to point
 
 ### Marking Deployment
 
-At PINCHme we use an awesome tool called [newrelic](http://newrelic.com/). When a deployment is finished we mark a
+We use an awesome tool called [newrelic](http://newrelic.com/). When a deployment is finished we mark a
 deployment with newrelic. If you want as a release manager you can do that yourself.
 
     ./mist mark -s QA
@@ -161,7 +161,7 @@ This allows the release manager to get an idea of what version is running in a s
 
     ./mist version -s QA
 
-    ./mist version -s QA -e PINCHme-US-QA-A
+    ./mist version -s QA -e test-QA-A
 
 ## Costs
 
@@ -173,7 +173,7 @@ This allows the release manager or cron job to start the elastic beanstalk envir
 
     ./mist start -s QA
 
-    ./mist start -s QA -e PINCHme-US-QA-A
+    ./mist start -s QA -e test-QA-A
 
 ### Stop
 
@@ -181,7 +181,7 @@ This allows the release manager or cron job to stop the elastic beanstalk enviro
 
     ./mist stop -s QA
 
-    ./mist stop -s QA -e PINCHme-US-QA-A
+    ./mist stop -s QA -e test-QA-A
 
 ## FAQ
 

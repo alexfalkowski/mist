@@ -15,7 +15,7 @@ describe Mist::GitHub do
         }
         When(:value) { github.register_deployment_key }
         Then {
-          expect(client).to have_received(:add_key).with('PINCHme US Deployment', 'test alexrfalkowski@gmail.com')
+          expect(client).to have_received(:add_key).with('MIST Deployment', 'test alexrfalkowski@gmail.com')
         }
       end
 
@@ -23,7 +23,7 @@ describe Mist::GitHub do
         Given(:access_token) { 'access_token' }
         Given(:email) { 'test@test.com' }
         Given(:client) {
-          double('Octokit::Client', keys: [{title: 'PINCHme US Deployment', key: 'donkey'}], add_key: nil)
+          double('Octokit::Client', keys: [{title: 'MIST Deployment', key: 'donkey'}], add_key: nil)
         }
         Given(:ssh_key) { double('Mist::SshKey', value: 'test alexrfalkowski@gmail.com') }
         Given(:github) {
@@ -31,7 +31,7 @@ describe Mist::GitHub do
         }
         When(:value) { github.register_deployment_key }
         Then {
-          expect(client).to_not have_received(:add_key).with('PINCHme US Deployment', 'test alexrfalkowski@gmail.com')
+          expect(client).to_not have_received(:add_key).with('MIST Deployment', 'test alexrfalkowski@gmail.com')
         }
       end
     end
@@ -41,7 +41,7 @@ describe Mist::GitHub do
         Given(:access_token) { 'access_token' }
         Given(:email) { 'test@test.com' }
         Given(:client) {
-          double('Octokit::Client', keys: [{title: 'PINCHme', key: 'test'}], add_key: nil)
+          double('Octokit::Client', keys: [{title: 'MIST', key: 'test'}], add_key: nil)
         }
         Given(:ssh_key) { double('Mist::SshKey', value: 'test alexrfalkowski@gmail.com') }
         Given(:github) {
@@ -49,7 +49,7 @@ describe Mist::GitHub do
         }
         When(:value) { github.register_deployment_key }
         Then {
-          expect(client).to_not have_received(:add_key).with('PINCHme US Deployment', 'test alexrfalkowski@gmail.com')
+          expect(client).to_not have_received(:add_key).with('MIST Deployment', 'test alexrfalkowski@gmail.com')
         }
       end
     end
@@ -60,7 +60,7 @@ describe Mist::GitHub do
       Given(:access_token) { 'access_token' }
       Given(:email) { 'test@test.com' }
       Given(:client) {
-        double('Octokit::Client', keys: [{id: 1, title: 'PINCHme US Deployment'}], remove_key: nil)
+        double('Octokit::Client', keys: [{id: 1, title: 'MIST Deployment'}], remove_key: nil)
       }
       Given(:ssh_key) { double('Mist::SshKey', value: 'test alexrfalkowski@gmail.com') }
       Given(:github) {

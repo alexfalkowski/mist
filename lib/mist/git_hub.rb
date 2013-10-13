@@ -1,6 +1,6 @@
 module Mist
   class GitHub
-    DEPLOYMENT_GITHUB_KEY = 'PINCHme US Deployment'
+    DEPLOYMENT_GITHUB_KEY = 'MIST Deployment'
 
     def initialize(options = {})
       @access_token = options[:access_token]
