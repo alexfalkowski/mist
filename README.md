@@ -27,6 +27,10 @@ Please take a look at the spec folder.
 
 ### Prerequisites
 
+The deployment tool requires some love before you use it.
+
+#### Environment Variables
+
 For the deployment tool to work you will need to add some keys to your environment.
 
 > export AWS_APP_ACCESS_KEY_ID=VALUE
@@ -42,6 +46,60 @@ For the deployment tool to work you will need to add some keys to your environme
 > export GITHUB_ACCESS_TOKEN=GITHUB_ACCESS_TOKEN
 
 Please consult [AWS IAM](http://aws.amazon.com/iam/) for those values.
+
+#### Config File
+
+The deployment tool uses a configuration file that is used to work out your stacks and environments.
+
+    git:
+      repository_name: test
+      repository_uri: git@test/test.git
+      local_path: /tmp
+    aws:
+      application_name: test
+      dev_tools_endpoint: git.elasticbeanstalk.us-east-1.amazonaws.com
+      region: us-east-1
+      hosted_zone: test.com.
+      stacks:
+        qa:
+          domain: qa.test.com.
+          endpoint: https://qa.test.com
+          newrelic_application_name: test-QA
+          basic_auth:
+            username: test_username
+            password: test_password
+          environments:
+            -
+              name: test-QA-A
+              uri: https://testqaa.com
+            -
+              name: test-QA-B
+              uri: https://testqab.com
+        uat:
+          domain: uat.test.com.
+          endpoint: https://uat.test.com
+          newrelic_application_name: test-UAT
+          basic_auth:
+            username: test_username
+            password: test_password
+          environments:
+            -
+              name: test-UAT-A
+              uri: https://testuata.com
+            -
+              name: test-UAT-B
+              uri: https://testuatb.com
+        live:
+          domain: live.test.com.
+          endpoint: https://live.test.com
+          newrelic_application_name: test
+          environments:
+            -
+              name: test-A
+              uri: https://testa.com
+            -
+              name: test-B
+              uri: https://testqb.com
 
 ### Setup & Cleanup
 
