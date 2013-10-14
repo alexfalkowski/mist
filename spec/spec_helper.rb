@@ -1,5 +1,7 @@
 $LOAD_PATH.unshift File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 
+CONFIG_PATH = File.expand_path(File.join(File.dirname(__FILE__), 'spec_config.yml'))
+
 require 'tempfile'
 require 'rspec/given'
 

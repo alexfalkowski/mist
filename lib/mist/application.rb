@@ -10,7 +10,7 @@ module Mist
       end
 
       def environment_message
-        'Deploy an environment, e.g PINCHme-US-QA-A|PINCHme-US-QA-B'
+        'Deploy an environment, e.g test-QA-A|test-QA-B'
       end
 
       def environment_alias

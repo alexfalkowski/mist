@@ -45,7 +45,7 @@ describe Mist::ElasticBeanstalk do
     Given(:eb) { Mist::ElasticBeanstalk.new(environment: environment, beanstalk: aws_eb) }
     When(:result) { eb.version('test') }
     Then {
-      expect(aws_eb_client).to have_received(:describe_environments).with(application_name: 'PINCHme-US',
+      expect(aws_eb_client).to have_received(:describe_environments).with(application_name: 'test',
                                                                           environment_names: %w(test))
     }
     Then { result == '1.1' }
