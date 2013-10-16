@@ -18,14 +18,20 @@ describe Mist::VersionControlExtensions do
   Given { FileUtils.mkpath File.join(repository_path, '.git') }
 
   context 'setup AWS dev tools' do
-    Given(:system_command) { SpecSystemCommand.new }
+    Given(:eb_tool) { Mist::ElasticBeanstalkTool.new(home_path: home_path) }
+    Given(:system_command) { double('SystemCommand', run_command: nil) }
     Given(:extensions) {
       Mist::VersionControlExtensions.new(environment: environment,
                                          home_path: home_path,
+                                         eb_tool: eb_tool,
                                          system_command: system_command)
     }
     When { extensions.setup }
-    Then { Dir.exists?(aws_dev_tools_path) }
+    Then {
+      expect(system_command).to have_received(:run_command)
+                                .with(File.join(home_path,
+                                                'AWS-ElasticBeanstalk-CLI-2.5.1/AWSDevTools/Linux/AWSDevTools-RepositorySetup.sh'))
+    }
   end
 
   context 'elastic beanstalk config' do
