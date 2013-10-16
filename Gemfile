@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'rake'
 gem 'aws-sdk'
 gem 'thor'
 gem 'newrelic_api'
